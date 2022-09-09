@@ -11,28 +11,14 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { HighlightOffOutlined } from '@mui/icons-material';
+import { EmojiEmotionsOutlined, HighlightOffOutlined, SentimentDissatisfiedOutlined } from '@mui/icons-material';
 
-import { deleteUsers, DeleteUsersRequest, UserRole } from '@/api';
-import { useAlert, useConfirm, useUsersContext } from '@/hooks';
-import { fDateSuffix } from '@/utils/formatTime';
+import { deleteUsers, DeleteUsersRequest } from '@/api';
+import { useAlert, useConfirm } from '@/hooks';
+import { fDateSuffix, role2color } from '@/utils';
 import Label from '@/components/Label';
+import { useUsersContext } from './usersState';
 import UpdateUser from './UpdateUser';
-
-// -------------------------------------------------------------------
-
-const role2color = (role: UserRole) => {
-  switch (role) {
-    case 'admin':
-      return 'error';
-    case 'author':
-      return 'secondary';
-    case 'user':
-      return 'primary';
-    default:
-      return 'primary';
-  }
-};
 
 // -------------------------------------------------------------------
 
@@ -77,7 +63,7 @@ export default function UsersTableBody() {
   return (
     <TableBody>
       {users.map((user) => {
-        const { id, username, email, avatar, role, postCount, starCount, createAt } = user;
+        const { id, username, email, avatar, role, postCount, isDeleted, createAt } = user;
         const isItemSelected = selected.indexOf(id) !== -1;
         return (
           <TableRow
@@ -91,9 +77,6 @@ export default function UsersTableBody() {
             <TableCell padding="checkbox">
               <Checkbox checked={isItemSelected} onChange={(event) => handleSelect(event, id)} />
             </TableCell>
-            <TableCell component="th" scope="row">
-              <Typography variant="subtitle2">{id}</Typography>
-            </TableCell>
             <TableCell>
               <Stack spacing={2} direction="row" alignItems="center">
                 <Avatar alt="User" src={avatar} sx={{ width: 40, height: 40 }} />
@@ -105,13 +88,19 @@ export default function UsersTableBody() {
                 </Box>
               </Stack>
             </TableCell>
-            <TableCell align="left">
+            <TableCell align="center">
               <Label variant="ghost" color={role2color(role)}>
                 {role}
               </Label>
             </TableCell>
-            <TableCell align="right">{postCount || 0}</TableCell>
-            <TableCell align="right">{starCount || 0}</TableCell>
+            <TableCell align="right">{postCount}</TableCell>
+            <TableCell align="right">
+              {isDeleted ? (
+                <SentimentDissatisfiedOutlined fontSize="small" color="disabled" />
+              ) : (
+                <EmojiEmotionsOutlined fontSize="small" color="success" />
+              )}
+            </TableCell>
             <TableCell align="right">{fDateSuffix(createAt)}</TableCell>
             <TableCell align="right">
               <Stack direction="row" spacing={0.5} justifyContent="center">

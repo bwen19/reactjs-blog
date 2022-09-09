@@ -18,16 +18,19 @@ export interface UserInfo {
   id: number;
   username: string;
   avatar: string;
-  postCount: number;
-  starCount: number;
-  viewCount: number;
+  info: string;
+  starCount?: number;
+  viewCount?: number;
   followerCount: number;
   followingCount: number;
+  isFollowed: boolean;
 }
 
-export interface User extends UserInfo {
+export interface User {
+  id: number;
+  username: string;
   email: string;
+  avatar: string;
+  info: string;
   role: UserRole;
-  unreadCount: number;
-  createAt: string;
 }

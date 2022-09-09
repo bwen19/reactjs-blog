@@ -1,6 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import useRoleAllowed from '@/hooks/useRoleAllowed';
-import { useAppSelector } from '@/hooks/reduxHook';
+import { useAppSelector, useRoleAllowed } from '@/hooks';
 import { UserRole } from '@/api/common';
 
 // ---------------------------------------------------------------------------

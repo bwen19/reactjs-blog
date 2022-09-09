@@ -5,11 +5,13 @@ import { Box, Button, IconButton, InputAdornment, Paper, Stack, TextField } from
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { ChangePasswordRequest, changePassword } from '@/api';
-import { useAlert } from '@/hooks';
+import { useAlert, useAppSelector } from '@/hooks';
 
 // -------------------------------------------------------------------
 
 export default function ChangePassword() {
+  const userId = useAppSelector((state) => state.auth.authUser?.id) as number;
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -43,7 +45,7 @@ export default function ChangePassword() {
         newPassword: values.newPassword,
       };
       try {
-        await changePassword(req);
+        await changePassword(userId, req);
         alertMsg('Your password has been changed', 'info');
       } catch (err) {
         alertMsg(err as string, 'error');

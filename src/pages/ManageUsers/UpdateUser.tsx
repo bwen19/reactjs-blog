@@ -19,8 +19,9 @@ import {
   FormControl,
 } from '@mui/material';
 import { EditOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
-import { updateUser, UpdateUserRequest, User, UserRole } from '@/api';
-import { useAlert, useUsersContext } from '@/hooks';
+import { updateUser, UpdateUserRequest, UserItem, UserRole } from '@/api';
+import { useAlert } from '@/hooks';
+import { useUsersContext } from './usersState';
 
 // -------------------------------------------------------------------
 
@@ -36,7 +37,7 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
 // -------------------------------------------------------------------
 
 interface IProps {
-  user: User;
+  user: UserItem;
 }
 
 export default function UpdateUser({ user }: IProps) {
@@ -55,6 +56,7 @@ export default function UpdateUser({ user }: IProps) {
     email: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').email('Must be a valid email').nullable(),
     password: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').nullable(),
     role: Yup.mixed().oneOf<UserRole>(['user', 'author', 'admin']).defined(),
+    isDeleted: Yup.mixed().oneOf<string>(['true', 'false']).defined(),
   });
 
   const formik = useFormik({
@@ -63,6 +65,7 @@ export default function UpdateUser({ user }: IProps) {
       email: user.email,
       password: '',
       role: user.role,
+      isDeleted: user.isDeleted ? 'true' : 'false',
     },
     validationSchema: UpdateUserSchema,
     onSubmit: async (values) => {
@@ -77,13 +80,17 @@ export default function UpdateUser({ user }: IProps) {
         if (values.role && values.role !== user.role) {
           req.role = values.role;
         }
+        const oldDeleted = user.isDeleted ? 'true' : 'false';
+        if (values.isDeleted && values.isDeleted !== oldDeleted) {
+          req.isDeleted = Boolean(values.isDeleted);
+        }
         if (Object.keys(req).length === 1) {
           alertMsg('Nothing seems to change', 'warning');
           return;
         }
 
-        const { data } = await updateUser(req);
-        dispatch({ type: 'updateUser', user: data.user });
+        await updateUser(req);
+        dispatch({ type: 'reload' });
         alertMsg('User updated successfully', 'success');
         setOpen(false);
       } catch (err) {
@@ -115,24 +122,14 @@ export default function UpdateUser({ user }: IProps) {
               onSubmit={handleSubmit}
             >
               <Stack spacing={3} sx={{ my: 2 }}>
-                <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between">
-                  <TextField
-                    fullWidth
-                    autoComplete="username"
-                    label="Username"
-                    {...getFieldProps('username')}
-                    error={Boolean(touched.username && errors.username)}
-                    helperText={touched.username && errors.username}
-                  />
-                  <FormControl sx={{ width: 150 }}>
-                    <InputLabel id="select-label">Role</InputLabel>
-                    <Select labelId="select-label" id="simple-select" label="Role" {...getFieldProps('role')}>
-                      <MenuItem value="user">User</MenuItem>
-                      <MenuItem value="author">Author</MenuItem>
-                      <MenuItem value="admin">Admin</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Stack>
+                <TextField
+                  fullWidth
+                  autoComplete="username"
+                  label="Username"
+                  {...getFieldProps('username')}
+                  error={Boolean(touched.username && errors.username)}
+                  helperText={touched.username && errors.username}
+                />
                 <TextField
                   fullWidth
                   autoComplete="email"
@@ -160,7 +157,28 @@ export default function UpdateUser({ user }: IProps) {
                   error={Boolean(touched.password && errors.password)}
                   helperText={touched.password && errors.password}
                 />
-
+                <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between">
+                  <FormControl sx={{ width: 180 }}>
+                    <InputLabel id="select-role">Role</InputLabel>
+                    <Select labelId="select-role" id="simple-select-role" label="Role" {...getFieldProps('role')}>
+                      <MenuItem value="user">User</MenuItem>
+                      <MenuItem value="author">Author</MenuItem>
+                      <MenuItem value="admin">Admin</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl sx={{ width: 150 }}>
+                    <InputLabel id="select-active">Active</InputLabel>
+                    <Select
+                      labelId="select-active"
+                      id="simple-select-active"
+                      label="Deleted"
+                      {...getFieldProps('isDeleted')}
+                    >
+                      <MenuItem value="true">false</MenuItem>
+                      <MenuItem value="false">true</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Stack>
                 <Button fullWidth size="large" type="submit" variant="contained" disabled={isSubmitting}>
                   Submit
                 </Button>

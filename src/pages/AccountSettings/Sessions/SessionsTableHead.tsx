@@ -1,8 +1,7 @@
 import React from 'react';
 import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
-
 import { Session, SessionOrderBy } from '@/api';
-import { useSessionsContext } from '@/hooks';
+import { useSessionsContext } from './sessionsState';
 
 // -------------------------------------------------------------------
 
@@ -26,11 +25,6 @@ interface HeadCell {
 }
 
 const headCells: readonly HeadCell[] = [
-  {
-    id: 'user',
-    label: 'Username',
-    align: 'left',
-  },
   {
     id: 'userAgent',
     label: 'Agent',

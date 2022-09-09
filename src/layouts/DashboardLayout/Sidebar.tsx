@@ -4,9 +4,9 @@ import { Avatar, Box, Typography, Drawer, useMediaQuery, Stack } from '@mui/mate
 import { useTheme } from '@mui/material/styles';
 
 import { DRAWER_WIDTH, APP_BAR_HEIGHT } from '@/themes/constants';
-import { useAppSelector } from '@/hooks';
 import { User } from '@/api';
-import Scrollbar from '@/components/Scrollbar';
+import { Scrollbar } from '@/components';
+import { useAppSelector } from '@/hooks';
 import NavSection from './NavSection';
 
 // -------------------------------------------------------------------

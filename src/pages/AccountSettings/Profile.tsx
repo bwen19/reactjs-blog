@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Avatar, Box, Button, IconButton, Paper, Stack, TextField, Typography } from '@mui/material';
 
-import { User, updateUser, UpdateUserRequest, uploadAvatar } from '@/api';
+import { User, changeProfile, ChangeProfileRequest, uploadAvatar } from '@/api';
 import { useAlert, useAppDispatch, useAppSelector } from '@/hooks';
 import { setUser } from '@/redux/authSlice';
 
@@ -19,6 +19,7 @@ export default function Profile() {
   const ProfileSchema = Yup.object().shape({
     username: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!'),
     email: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').email('Email is not valid'),
+    info: Yup.string().max(150, 'Too Long!'),
     file: Yup.mixed(),
   });
 
@@ -26,16 +27,20 @@ export default function Profile() {
     initialValues: {
       username: user.username,
       email: user.email,
+      info: user.info,
       file: null,
     },
     validationSchema: ProfileSchema,
     onSubmit: async (values) => {
-      const req: UpdateUserRequest = { id: user.id };
+      const req: ChangeProfileRequest = { id: user.id };
       if (values.username && values.username !== user.username) {
         req.username = values.username;
       }
       if (values.email && values.email !== user.email) {
         req.email = values.email;
+      }
+      if (values.info && values.info !== user.info) {
+        req.info = values.info;
       }
       if (Object.keys(req).length === 1) {
         alertMsg('Nothing seems to change', 'warning');
@@ -43,7 +48,7 @@ export default function Profile() {
       }
 
       try {
-        const { data } = await updateUser(req);
+        const { data } = await changeProfile(req);
         dispatch(setUser(data.user));
         alertMsg('Your profile info has been changed', 'success');
       } catch (err) {
@@ -96,12 +101,22 @@ export default function Profile() {
           />
           <TextField
             fullWidth
-            autoComplete="username"
+            autoComplete="email"
             type="email"
             label="Email address"
             {...getFieldProps('email')}
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
+            sx={{ mb: 4 }}
+          />
+          <TextField
+            fullWidth
+            autoComplete="info"
+            type="info"
+            label="Personal Intro"
+            {...getFieldProps('info')}
+            error={Boolean(touched.info && errors.info)}
+            helperText={touched.info && errors.info}
             sx={{ mb: 4 }}
           />
           <Button size="large" type="submit" variant="contained" disabled={isSubmitting}>

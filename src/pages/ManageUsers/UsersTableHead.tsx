@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
 
-import { User, UserOrderBy } from '@/api';
-import { useUsersContext } from '@/hooks';
+import { UserItem, UserOrderBy } from '@/api';
+import { useUsersContext } from './usersState';
 
 // -------------------------------------------------------------------
 
@@ -19,19 +19,13 @@ const visuallyHidden = {
 };
 
 interface HeadCell {
-  id: keyof User | 'action';
+  id: keyof UserItem | 'action';
   label: string;
   sortable?: boolean;
   align: 'left' | 'right' | 'center';
 }
 
 const headCells: readonly HeadCell[] = [
-  {
-    id: 'id',
-    label: 'ID',
-    align: 'left',
-    sortable: true,
-  },
   {
     id: 'username',
     label: 'User Profile',
@@ -42,17 +36,17 @@ const headCells: readonly HeadCell[] = [
     id: 'role',
     label: 'Role',
     sortable: true,
-    align: 'left',
+    align: 'center',
   },
   {
     id: 'postCount',
     label: 'Posts',
-    sortable: true,
     align: 'right',
   },
   {
-    id: 'starCount',
-    label: 'Stars',
+    id: 'isDeleted',
+    label: 'Active',
+    sortable: true,
     align: 'right',
   },
   {

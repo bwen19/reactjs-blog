@@ -3,8 +3,9 @@ import { Checkbox, IconButton, TableBody, TableCell, TableRow, Tooltip, Typograp
 import { HighlightOffOutlined } from '@mui/icons-material';
 
 import { deleteSessions, DeleteSessionsRequest } from '@/api';
-import { useAlert, useConfirm, useSessionsContext } from '@/hooks';
+import { useAlert, useConfirm } from '@/hooks';
 import { fDateSuffix } from '@/utils/formatTime';
+import { useSessionsContext } from './sessionsState';
 
 // -------------------------------------------------------------------
 
@@ -40,7 +41,7 @@ export default function SessionsTableBody() {
         sessionIds: [sessionId],
       };
       await deleteSessions(req);
-      dispatch({ type: 'reload' });
+      dispatch({ type: 'reload', numDeleted: req.sessionIds.length });
     } catch (err) {
       alertMsg(err as string, 'error');
     }
@@ -49,7 +50,7 @@ export default function SessionsTableBody() {
   return (
     <TableBody>
       {sessions.map((session) => {
-        const { id, user, userAgent, clientIp, createAt, expiresAt } = session;
+        const { id, userAgent, clientIp, createAt, expiresAt } = session;
         const isItemSelected = selected.indexOf(id) !== -1;
         return (
           <TableRow
@@ -62,9 +63,6 @@ export default function SessionsTableBody() {
           >
             <TableCell padding="checkbox">
               <Checkbox checked={isItemSelected} onChange={(event) => handleSelect(event, id)} />
-            </TableCell>
-            <TableCell component="th" scope="row">
-              <Typography variant="subtitle2">{user.username}</Typography>
             </TableCell>
             <TableCell>{userAgent}</TableCell>
             <TableCell>

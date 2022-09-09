@@ -1,6 +1,6 @@
 import { Box, Chip, Divider, Link, Stack, IconButton, Typography, Grid } from '@mui/material';
 import { Category, LocalOffer, MoreHoriz } from '@mui/icons-material';
-import { Post } from '../api';
+import { Post } from '@/api';
 
 // -------------------------------------------------------------------
 

@@ -20,7 +20,8 @@ import {
 } from '@mui/material';
 import { PersonAddOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
 import { createUser, CreateUserRequest, UserRole } from '@/api';
-import { useAlert, useUsersContext } from '@/hooks';
+import { useAlert } from '@/hooks';
+import { useUsersContext } from './usersState';
 
 // -------------------------------------------------------------------
 
@@ -73,10 +74,10 @@ export default function CreateUser() {
           password: values.password,
           role: values.role as UserRole,
         };
-        const { data } = await createUser(req);
+        await createUser(req);
         setOpen(false);
         dispatch({ type: 'reload' });
-        alertMsg(`User created successfully: ${data.user.username}`, 'success');
+        alertMsg('User created successfully', 'success');
       } catch (err) {
         alertMsg(err as string, 'error');
       }

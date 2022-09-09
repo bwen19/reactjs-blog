@@ -8,12 +8,18 @@ interface AuthState {
   isLoggedIn: boolean;
   accessToken: string;
   authUser: User | null;
+  unreadCount: number;
+  open: boolean;
+  openLogin: boolean;
 }
 
 const initialState: AuthState = {
   isLoggedIn: false,
   accessToken: '',
   authUser: null,
+  unreadCount: 0,
+  open: false,
+  openLogin: true,
 };
 
 export const autoLoginThunk = createAsyncThunk('auth/autoLogin', async () => {
@@ -33,10 +39,12 @@ export const authSlice = createSlice({
   reducers: {
     setAuth: (state, action: PayloadAction<LoginResponse>) => {
       state.isLoggedIn = true;
-      const { user, accessToken, refreshToken } = action.payload;
+      const { user, accessToken, refreshToken, unreadCount } = action.payload;
       state.authUser = user;
       state.accessToken = `Bearer ${accessToken}`;
       saveToken(refreshToken);
+      state.unreadCount = Number(unreadCount);
+      state.open = false;
     },
     setToken: (state, action: PayloadAction<string>) => {
       state.accessToken = `Bearer ${action.payload}`;
@@ -50,14 +58,31 @@ export const authSlice = createSlice({
       state.accessToken = '';
       removeToken();
     },
+    showAuthDialog: (state, action: PayloadAction<boolean>) => {
+      state.open = true;
+      state.openLogin = action.payload;
+    },
+    closeAuthDialog: (state) => {
+      state.open = false;
+      if (state.isLoggedIn) {
+        state.isLoggedIn = false;
+        state.authUser = null;
+        state.accessToken = '';
+        removeToken();
+      }
+    },
+    switchAuthDialog: (state) => {
+      state.openLogin = !state.openLogin;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(autoLoginThunk.fulfilled, (state, action) => {
         state.isLoggedIn = true;
-        const { user, accessToken } = action.payload;
+        const { user, accessToken, unreadCount } = action.payload;
         state.authUser = user;
         state.accessToken = `Bearer ${accessToken}`;
+        state.unreadCount = Number(unreadCount);
       })
       .addCase(autoLoginThunk.rejected, (state) => {
         authSlice.caseReducers.removeAuth(state);
@@ -71,5 +96,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setAuth, setToken, setUser, removeAuth } = authSlice.actions;
+export const { setAuth, setToken, setUser, removeAuth, showAuthDialog, closeAuthDialog, switchAuthDialog } =
+  authSlice.actions;
 export default authSlice.reducer;

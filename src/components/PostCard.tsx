@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Avatar, Box, Card, CardContent, CardMedia, Chip, Divider, Stack, Typography } from '@mui/material';
 import { CalendarMonthOutlined, VisibilityOutlined } from '@mui/icons-material';
 
-import { Post } from '../api';
+import { Post } from '@/api';
 
 // ---------------------------------------------------------------------------
 

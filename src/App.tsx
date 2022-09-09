@@ -3,10 +3,12 @@ import { BrowserRouter } from 'react-router-dom';
 
 import Routes from './routes';
 import CustomThemeProvider from './themes';
-import { useAppDispatch } from './hooks/reduxHook';
+import { useAppDispatch } from './hooks';
 import { autoLoginThunk } from './redux/authSlice';
 import ConfirmDialog from './components/ConfirmDialog';
 import AlertMessage from './components/AlertMessage';
+import LoginDialog from './components/LoginDialog';
+import RegisterDialog from './components/RegisterDialog';
 
 // ---------------------------------------------------------------------------
 
@@ -21,8 +23,10 @@ export default function App() {
     <BrowserRouter>
       <CustomThemeProvider>
         <Routes />
-        <ConfirmDialog />
         <AlertMessage />
+        <ConfirmDialog />
+        <LoginDialog />
+        <RegisterDialog />
       </CustomThemeProvider>
     </BrowserRouter>
   );

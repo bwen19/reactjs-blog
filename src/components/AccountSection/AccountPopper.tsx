@@ -14,9 +14,7 @@ import {
 
 import { User } from '@/api';
 import { useAppSelector } from '@/hooks';
-import MenuListItem from './MenuListItem';
-import LogoutListItem from './LogoutListItem';
-import menuConfig from './AccountMenuConfig';
+import AccountMenuList from './AccountMenuList';
 
 // -------------------------------------------------------------------
 
@@ -78,11 +76,7 @@ export default function AccountPopper() {
                   </Box>
                   <Divider />
                   <List component="nav" sx={{ minWidth: 200, width: '100%', px: 1 }}>
-                    {menuConfig.map((item) => (
-                      <MenuListItem key={item.id} menu={item} userId={authUser.id} onClose={handleClose} />
-                    ))}
-                    <Divider />
-                    <LogoutListItem onClose={handleClose} />
+                    <AccountMenuList userId={authUser.id} onClose={handleClose} />
                   </List>
                 </Box>
               </ClickAwayListener>

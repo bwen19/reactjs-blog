@@ -3,7 +3,8 @@ import { Toolbar, Tooltip, IconButton, Typography } from '@mui/material';
 import { DeleteOutlined } from '@mui/icons-material';
 
 import { deleteSessions, DeleteSessionsRequest } from '@/api';
-import { useAlert, useConfirm, useSessionsContext } from '@/hooks';
+import { useAlert, useConfirm } from '@/hooks';
+import { useSessionsContext } from './sessionsState';
 
 // -------------------------------------------------------------------
 
@@ -33,7 +34,7 @@ export default function SessionsTableToolbar() {
         sessionIds: selected,
       };
       await deleteSessions(req);
-      dispatch({ type: 'reload' });
+      dispatch({ type: 'reload', numDeleted: req.sessionIds.length });
     } catch (err) {
       alertMsg(err as string, 'error');
     }

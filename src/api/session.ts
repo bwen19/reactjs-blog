@@ -1,9 +1,8 @@
 import axiosPrivate from './axiosPrivate';
-import { EmptyResponse, PageOption, UserInfo } from './common';
+import { EmptyResponse, PageOption } from './common';
 
 export interface Session {
   id: string;
-  user: UserInfo;
   userAgent: string;
   clientIp: string;
   createAt: Date;
@@ -28,7 +27,6 @@ export type SessionOrderBy = 'userId' | 'clientIp' | 'createAt' | 'expiresAt';
 
 export interface ListSessionsRequest extends PageOption {
   orderBy: SessionOrderBy;
-  userId?: number;
 }
 export interface ListSessionsResponse {
   total: number;

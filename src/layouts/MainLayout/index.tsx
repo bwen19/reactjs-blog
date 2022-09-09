@@ -1,8 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import { Box } from '@mui/material';
-
+import { Box, Container, Typography } from '@mui/material';
 import MainHeader from './MainHeader';
-import MainFooter from './MainFooter';
 
 // -------------------------------------------------------------------
 
@@ -11,7 +9,14 @@ export default function MainLayout() {
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <MainHeader />
       <Outlet />
-      <MainFooter />
+      <Box component="footer" sx={{ py: 3, px: 2, mt: 'auto', bgcolor: '#282c34', color: 'background.paper' }}>
+        <Container maxWidth="sm">
+          <Typography variant="body2" align="center">
+            {'Copyright © Eruhini '}
+            {new Date().getFullYear()}
+          </Typography>
+        </Container>
+      </Box>
     </Box>
   );
 }

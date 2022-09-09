@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 import { ListSessionsResponse, Order, Session, SessionOrderBy } from '@/api';
 
 // -------------------------------------------------------------------
@@ -31,7 +31,7 @@ export const initialState: SessionsState = {
 
 export type SessionsAction =
   | { type: 'setIsLoading'; value: boolean }
-  | { type: 'reload' }
+  | { type: 'reload'; numDeleted: number }
   | { type: 'setError'; error: string }
   | { type: 'setSessions'; data: ListSessionsResponse }
   | { type: 'setSelected'; selected: readonly string[] }
@@ -45,7 +45,12 @@ export function sessionsReducer(state: SessionsState, action: SessionsAction) {
     case 'setIsLoading':
       return { ...state, isLoading: action.value };
     case 'reload':
-      return { ...state, loadCount: state.loadCount + 1, selected: [] };
+      return {
+        ...state,
+        pageId: action.numDeleted >= state.sessions.length && state.pageId > 0 ? state.pageId - 1 : state.pageId,
+        loadCount: state.loadCount + 1,
+        selected: [],
+      };
     case 'setError':
       return { ...state, error: action.error, isLoading: false };
     case 'setSessions':
@@ -70,3 +75,5 @@ export const SessionsContext = createContext<{
   state: initialState,
   dispatch: () => null,
 });
+
+export const useSessionsContext = () => useContext(SessionsContext);

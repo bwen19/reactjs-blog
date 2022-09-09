@@ -3,7 +3,7 @@ import { Store } from '@reduxjs/toolkit';
 
 import { getToken } from '@/utils/localStorage';
 import { RootState } from '@/redux/store';
-import { setToken } from '@/redux/authSlice';
+import { setToken, showAuthDialog } from '@/redux/authSlice';
 import { BASE_URL, ErrType } from './axiosInstance';
 import { refresh } from './auth';
 
@@ -11,7 +11,7 @@ import { refresh } from './auth';
 
 let store: Store<RootState>;
 
-export const injectStorePrivate = (_store: Store<RootState>) => {
+export const injectStore = (_store: Store<RootState>) => {
   store = _store;
 };
 
@@ -88,6 +88,7 @@ axiosPrivate.interceptors.response.use(
             resolve(axiosPrivate(prevRequest));
           })
           .catch((err) => {
+            store.dispatch(showAuthDialog(true));
             processQueue(err, '');
             reject(err);
           })

@@ -1,24 +1,7 @@
-import { styled } from '@mui/material/styles';
-import { AppBar, Box, Container, Toolbar, Avatar, ButtonBase } from '@mui/material';
-import { MenuOpenOutlined } from '@mui/icons-material';
+import { AppBar, Box, Container, Toolbar } from '@mui/material';
+import { FormatIndentDecreaseOutlined, FormatIndentIncreaseOutlined } from '@mui/icons-material';
 
-import LogoButton from '@/components/LogoButton';
-import AccountSection from '@/components/AccountSection';
-
-// -------------------------------------------------------------------
-
-const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  borderRadius: '8px',
-  width: '24px',
-  height: '24px',
-  transition: 'all .2s ease-in-out',
-  background: theme.palette.dark.main,
-  color: theme.palette.grey[400],
-  '&:hover': {
-    background: theme.palette.grey[300],
-    color: theme.palette.primary.dark,
-  },
-}));
+import { AccountSection, CustomIconButton, LogoButton } from '@/components';
 
 // -------------------------------------------------------------------
 
@@ -31,26 +14,22 @@ export default function DashboardHeader({ onDrawerToggle }: IProps) {
     <AppBar elevation={0} color="dark" position="fixed">
       <Container maxWidth="xl">
         <Toolbar variant="dense" disableGutters>
-          <Box component="span" sx={{ mr: 6, display: { xs: 'none', md: 'flex' } }}>
+          <Box component="span" sx={{ mr: 12, display: { xs: 'none', md: 'flex' } }}>
             <LogoButton />
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <ButtonBase onClick={onDrawerToggle} sx={{ borderRadius: '12px' }}>
-              <StyledAvatar>
-                <MenuOpenOutlined sx={{ fontSize: '1.2rem' }} />
-              </StyledAvatar>
-            </ButtonBase>
+            <CustomIconButton onClick={onDrawerToggle}>
+              <FormatIndentIncreaseOutlined sx={{ fontSize: '1.4rem' }} />
+            </CustomIconButton>
           </Box>
           <Box component="span" sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <LogoButton />
           </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <ButtonBase onClick={onDrawerToggle} sx={{ borderRadius: '12px' }}>
-              <StyledAvatar>
-                <MenuOpenOutlined sx={{ fontSize: '1.2rem' }} />
-              </StyledAvatar>
-            </ButtonBase>
+            <CustomIconButton onClick={onDrawerToggle}>
+              <FormatIndentDecreaseOutlined sx={{ fontSize: '1.4rem' }} />
+            </CustomIconButton>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <AccountSection />

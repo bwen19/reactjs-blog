@@ -1,9 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
 import {
-  Avatar,
-  ButtonBase,
   ClickAwayListener,
   Grow,
   List,
@@ -13,25 +10,22 @@ import {
   Paper,
   Popper,
 } from '@mui/material';
-import { MenuRounded as MenuIcon } from '@mui/icons-material';
-
-import mainMenuConfig from './MainMenuConfig';
+import { CottageOutlined, InfoOutlined, MenuRounded } from '@mui/icons-material';
+import { CustomIconButton } from '@/components';
 
 // -------------------------------------------------------------------
 
-const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  borderRadius: '8px',
-  width: '24px',
-  height: '24px',
-  transition: 'all .2s ease-in-out',
-  background: theme.palette.dark.main,
-  color: theme.palette.grey[400],
-  '&:hover': {
-    background: theme.palette.grey[300],
-    color: theme.palette.primary.dark,
-  },
-}));
+export interface MenuItem {
+  id: number;
+  name: string;
+  path: string;
+  icon: JSX.Element;
+}
 
+export const mainMenuConfig: MenuItem[] = [
+  { id: 1, name: 'Home', path: '/', icon: <CottageOutlined sx={{ fontSize: 18 }} /> },
+  { id: 2, name: 'About', path: '/about', icon: <InfoOutlined sx={{ fontSize: 18 }} /> },
+];
 // -------------------------------------------------------------------
 
 export default function MenuPopper() {
@@ -68,11 +62,9 @@ export default function MenuPopper() {
 
   return (
     <>
-      <ButtonBase ref={anchorRef} onClick={handleToggle} sx={{ borderRadius: '12px' }}>
-        <StyledAvatar>
-          <MenuIcon sx={{ fontSize: '1.2rem' }} />
-        </StyledAvatar>
-      </ButtonBase>
+      <CustomIconButton ref={anchorRef} onClick={handleToggle}>
+        <MenuRounded sx={{ fontSize: '1.4rem' }} />
+      </CustomIconButton>
       <Popper
         placement="bottom-start"
         open={open}

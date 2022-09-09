@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Table, TableContainer, TablePagination } from '@mui/material';
 
-import { useUsersContext } from '@/hooks';
+import { useUsersContext } from './usersState';
 import UsersTableHead from './UsersTableHead';
 import UsersTableToolbar from './UsersTableToolbar';
 import UsersTableBody from './UsersTableBody';

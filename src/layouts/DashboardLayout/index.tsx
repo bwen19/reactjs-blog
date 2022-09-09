@@ -17,7 +17,7 @@ const StyledMain = styled('main', { shouldForwardProp: (prop) => prop !== 'open'
   flexGrow: 1,
   overflow: 'auto',
   minHeight: '100%',
-  paddingTop: theme.spacing(9),
+  paddingTop: theme.spacing(10),
   paddingBottom: theme.spacing(4),
   paddingLeft: theme.spacing(2),
   paddingRight: theme.spacing(2),

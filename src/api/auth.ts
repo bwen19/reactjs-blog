@@ -16,13 +16,15 @@ export const register = (req: RegisterRequest) => axios.post<RegisterResponse>('
 // -------------------------------------------------------------------
 // Login
 export interface LoginRequest {
-  email: string;
+  username?: string;
+  email?: string;
   password: string;
 }
 export interface LoginResponse {
   user: User;
   accessToken: string;
   refreshToken: string;
+  unreadCount: number;
 }
 export const login = (req: LoginRequest) => axios.post<LoginResponse>('/auth/login', req);
 
@@ -34,6 +36,7 @@ export interface AutoLoginRequest {
 export interface AutoLoginResponse {
   user: User;
   accessToken: string;
+  unreadCount: number;
 }
 export const autoLogin = (req: AutoLoginRequest) => axios.post<AutoLoginResponse>('/auth/autologin', req);
 

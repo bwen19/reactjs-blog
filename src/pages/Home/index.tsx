@@ -3,7 +3,7 @@ import { Box, Container, Fab, Pagination, Paper, ToggleButton, ToggleButtonGroup
 import { AccessTimeFilled, KeyboardArrowUp, LocalFireDepartment } from '@mui/icons-material';
 
 import { Post } from '@/api/post';
-import { useAppDispatch, useAppSelector } from '@/hooks/reduxHook';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { setOption, fetchPosts } from '@/redux/postsSlice';
 import ScrollTop from '@/components/ScrollTop';
 import PostCard from '@/components/PostCard';

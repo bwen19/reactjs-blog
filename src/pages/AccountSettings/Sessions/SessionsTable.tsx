@@ -1,7 +1,7 @@
 import React from 'react';
 import { Paper, Table, TableContainer, TablePagination } from '@mui/material';
 
-import { useSessionsContext } from '@/hooks';
+import { useSessionsContext } from './sessionsState';
 import SessionsTableHead from './SessionsTableHead';
 import SessionsTableToolbar from './SessionsTableToolbar';
 import SessionsTableBody from './SessionsTableBody';
