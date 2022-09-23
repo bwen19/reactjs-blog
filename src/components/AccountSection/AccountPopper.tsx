@@ -54,7 +54,9 @@ export default function AccountPopper() {
         anchorEl={anchorRef.current}
         transition
         disablePortal
-        popperOptions={{ modifiers: [{ name: 'offset', options: { offset: [0, 10] } }] }}
+        popperOptions={{
+          modifiers: [{ name: 'offset', options: { offset: [0, 16] } }],
+        }}
       >
         {({ TransitionProps, placement }) => (
           <Grow
@@ -76,7 +78,7 @@ export default function AccountPopper() {
                   </Box>
                   <Divider />
                   <List component="nav" sx={{ minWidth: 200, width: '100%', px: 1 }}>
-                    <AccountMenuList userId={authUser.id} onClose={handleClose} />
+                    <AccountMenuList onClose={handleClose} />
                   </List>
                 </Box>
               </ClickAwayListener>

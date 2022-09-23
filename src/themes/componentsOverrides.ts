@@ -19,7 +19,7 @@ export default function styleOverrides(theme: Theme) {
             fontWeight: theme.typography.fontWeightBold,
           },
           '&:hover': {
-            color: alpha(theme.palette.primary.light, 1),
+            color: alpha(theme.palette.primary.dark, 1),
           },
         },
       },
@@ -56,6 +56,15 @@ export default function styleOverrides(theme: Theme) {
         },
       },
     },
+    MuiListItemAvatar: {
+      styleOverrides: {
+        root: {
+          bgcolor: theme.palette.grey[700],
+          fontWeight: theme.typography.fontWeightLight,
+          minWidth: '32px',
+        },
+      },
+    },
     MuiListItemText: {
       styleOverrides: {
         root: {
@@ -72,6 +81,19 @@ export default function styleOverrides(theme: Theme) {
           '& .MuiTableCell-root': {
             fontWeight: 600,
             lineHeight: 1,
+          },
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          fontWeight: theme.typography.fontWeightRegular,
+          fontSize: theme.typography.pxToRem(15),
+          color: 'rgba(0, 0, 0, 0.7)',
+          '&.Mui-selected': {
+            color: '#635ee7',
+            fontWeight: theme.typography.fontWeightBold,
           },
         },
       },

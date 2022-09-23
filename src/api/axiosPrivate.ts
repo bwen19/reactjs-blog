@@ -88,7 +88,7 @@ axiosPrivate.interceptors.response.use(
             resolve(axiosPrivate(prevRequest));
           })
           .catch((err) => {
-            store.dispatch(showAuthDialog(true));
+            store.dispatch(showAuthDialog());
             processQueue(err, '');
             reject(err);
           })

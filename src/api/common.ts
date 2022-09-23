@@ -1,10 +1,50 @@
-export type FetchStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
+import { SvgIconComponent } from '@mui/icons-material';
 
-export type Order = 'asc' | 'desc';
+export interface FetchStatus {
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  error: string;
+}
+
+export enum Permission {
+  GHOST = 0,
+  USER = 1,
+  AUTHOR = 2,
+  ADMIN = 3,
+}
+
+export function role2Permission(role: UserRole): Permission {
+  switch (role) {
+    case 'user':
+      return Permission.USER;
+    case 'author':
+      return Permission.AUTHOR;
+    case 'admin':
+      return Permission.ADMIN;
+    default:
+      return Permission.GHOST;
+  }
+}
+
+export interface IMenuConfig {
+  id: number;
+  name: string;
+  path: string;
+  Icon: SvgIconComponent;
+  value?: string;
+  rank?: Permission;
+  shown?: boolean;
+}
+
+// -------------------------------------------------------------------
 
 export interface PageOption {
   pageId: number;
   pageSize: number;
+}
+
+export type Order = 'asc' | 'desc';
+
+export interface PageOrderOption extends PageOption {
   order: Order;
 }
 
@@ -14,23 +54,33 @@ export interface EmptyResponse {}
 
 export type UserRole = 'user' | 'author' | 'admin';
 
-export interface UserInfo {
-  id: number;
-  username: string;
-  avatar: string;
-  info: string;
-  starCount?: number;
-  viewCount?: number;
-  followerCount: number;
-  followingCount: number;
-  isFollowed: boolean;
-}
-
 export interface User {
-  id: number;
+  id: string;
   username: string;
   email: string;
   avatar: string;
-  info: string;
+  intro: string;
   role: UserRole;
+}
+
+export interface UserInfo {
+  id: string;
+  username: string;
+  avatar: string;
+  intro: string;
+  followerCount: string;
+  followingCount: string;
+  followed: boolean;
+}
+
+// -------------------------------------------------------------------
+
+export interface Category {
+  id: string;
+  name: string;
+}
+
+export interface Tag {
+  id: string;
+  name: string;
 }

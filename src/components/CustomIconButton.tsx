@@ -9,11 +9,10 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   width: '30px',
   height: '30px',
   transition: 'all .2s ease-in-out',
-  background: theme.palette.dark.main,
-  color: theme.palette.grey[400],
+  background: 'transparent',
+  color: theme.palette.grey[200],
   '&:hover': {
-    background: theme.palette.grey[300],
-    color: theme.palette.primary.dark,
+    color: theme.palette.primary.light,
   },
 }));
 

@@ -1,3 +1,3 @@
 export * from './common';
-export * from './formatTime';
+export * from './formater';
 export * from './localStorage';

@@ -1,55 +1,34 @@
 import { useNavigate } from 'react-router-dom';
-import { useTheme } from '@mui/material/styles';
-import { Divider, ListItemButton, ListItemIcon, ListItemText, useMediaQuery } from '@mui/material';
-import {
-  DashboardOutlined,
-  LogoutOutlined,
-  NotificationsOutlined,
-  PersonOutlined,
-  SettingsOutlined,
-  SvgIconComponent,
-} from '@mui/icons-material';
-import { useAppDispatch } from '@/hooks';
+import { Divider, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { LogoutOutlined } from '@mui/icons-material';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { logoutThunk } from '@/redux/authSlice';
+import AccountMenuConfig from './AccountMenuConfig';
+import { IMenuConfig, Permission } from '@/api';
 
 // -------------------------------------------------------------------
-
-interface IMenu {
-  id: number;
-  name: string;
-  path: string;
-  Icon: SvgIconComponent;
-  type?: string;
-}
-
-const menuConfig: IMenu[] = [
-  { id: 1, name: 'Notifications', path: '/dashboard/notifications', Icon: NotificationsOutlined, type: 'notice' },
-  { id: 2, name: 'Personal Profile', path: '/user', Icon: PersonOutlined, type: 'profile' },
-  { id: 3, name: 'Account Settings', path: '/dashboard/account', Icon: SettingsOutlined },
-  { id: 4, name: 'Dashboard', path: '/dashboard/overview', Icon: DashboardOutlined },
-];
 
 // -------------------------------------------------------------------
 
 interface MenuListItemProps {
-  menu: IMenu;
-  userId: number;
-  isDesktop: boolean;
+  menu: IMenuConfig;
+  userId: string;
+  permission: Permission;
   onClose: (event: Event | React.SyntheticEvent) => void;
 }
 
 function MenuListItem(props: MenuListItemProps) {
-  const { menu, userId, isDesktop, onClose } = props;
-  const { name, type, path, Icon } = menu;
+  const { menu, userId, permission, onClose } = props;
+  const { name, path, Icon, rank } = menu;
 
   const navigate = useNavigate();
 
-  if (isDesktop && menu.type === 'notice') {
+  if (rank && permission < rank) {
     return null;
   }
 
   const handleListItemClick = (event: Event | React.SyntheticEvent) => {
-    const directTo = type === 'profile' ? `${path}/${userId}` : path;
+    const directTo = name === 'Personal Homepage' ? `${path}/${userId}` : path;
     navigate(directTo);
     onClose(event);
   };
@@ -67,15 +46,12 @@ function MenuListItem(props: MenuListItemProps) {
 // -------------------------------------------------------------------
 
 interface AccountMenuListProps {
-  userId: number;
   onClose: (event: Event | React.SyntheticEvent) => void;
 }
 
-export default function AccountMenuList({ userId, onClose }: AccountMenuListProps) {
+export default function AccountMenuList({ onClose }: AccountMenuListProps) {
   const dispatch = useAppDispatch();
-
-  const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+  const auth = useAppSelector((state) => state.auth);
 
   const handleLogout = async (event: Event | React.SyntheticEvent) => {
     dispatch(logoutThunk());
@@ -84,8 +60,14 @@ export default function AccountMenuList({ userId, onClose }: AccountMenuListProp
 
   return (
     <>
-      {menuConfig.map((item) => (
-        <MenuListItem key={item.id} menu={item} userId={userId} isDesktop={isDesktop} onClose={onClose} />
+      {AccountMenuConfig.map((item) => (
+        <MenuListItem
+          key={item.id}
+          menu={item}
+          userId={auth.authUser!.id}
+          permission={auth.permission}
+          onClose={onClose}
+        />
       ))}
       <Divider />
       <ListItemButton onClick={handleLogout} sx={{ mt: 1, py: 1, borderRadius: '10px', fontSize: '14px' }}>

@@ -1,85 +1,112 @@
-import axios from './axiosInstance';
+import axiosInstance from './axiosInstance';
 import axiosPrivate from './axiosPrivate';
-import { UserInfo, User, EmptyResponse, UserRole, PageOption } from './common';
+import { UserInfo, User, EmptyResponse, UserRole, PageOrderOption } from './common';
 
 // -------------------------------------------------------------------
-// Create user
+// CreateUser
+
 export interface CreateUserRequest {
   username: string;
   email: string;
   password: string;
   role: UserRole;
 }
+
 export const createUser = (req: CreateUserRequest) => axiosPrivate.post<EmptyResponse>('/user', req);
 
 // -------------------------------------------------------------------
-// Delete users
+// DeleteUsers
+
 export interface DeleteUsersRequest {
-  userIds: readonly number[];
+  userIds: string[];
 }
+
 export const deleteUsers = (req: DeleteUsersRequest) => axiosPrivate.delete<EmptyResponse>('/user', { data: req });
 
 // -------------------------------------------------------------------
-// Update user
+// UpdateUser
+
 export interface UpdateUserRequest {
-  id: number;
   username?: string;
   email?: string;
   password?: string;
   role?: UserRole;
-  isDeleted?: boolean;
+  deleted?: boolean;
 }
-export const updateUser = (req: UpdateUserRequest) => axiosPrivate.patch<EmptyResponse>(`/user/${req.id}`, req);
+
+export const updateUser = (userId: string, req: UpdateUserRequest) =>
+  axiosPrivate.patch<EmptyResponse>(`/user/${userId}`, req);
 
 // -------------------------------------------------------------------
-// Change profile
+// ListUsers
+
+export type UserOrderBy = 'username' | 'role' | 'deleted' | 'createAt';
+
+export interface ListUsersRequest extends PageOrderOption {
+  orderBy: UserOrderBy;
+  keyword?: string;
+}
+
+export interface UserItem {
+  id: string;
+  username: string;
+  email: string;
+  avatar: string;
+  postCount: string;
+  role: UserRole;
+  deleted: boolean;
+  createAt: Date;
+}
+
+export interface ListUsersResponse {
+  total: string;
+  users: UserItem[];
+}
+
+export const listUsers = (req: ListUsersRequest) => axiosPrivate.get<ListUsersResponse>('/user', { params: req });
+
+// -------------------------------------------------------------------
+// ChangeProfile
+
 export interface ChangeProfileRequest {
-  id: number;
   username?: string;
   email?: string;
-  info?: string;
+  intro?: string;
 }
+
 export interface ChangeProfileResponse {
   user: User;
 }
-export const changeProfile = (req: ChangeProfileRequest) =>
-  axiosPrivate.patch<ChangeProfileResponse>(`/user/${req.id}/profile`, req);
+
+export const changeProfile = (userId: string, req: ChangeProfileRequest) =>
+  axiosPrivate.patch<ChangeProfileResponse>(`/user/${userId}/profile`, req);
 
 // -------------------------------------------------------------------
-// Change password
+// ChangePassword
+
 export interface ChangePasswordRequest {
   oldPassword: string;
   newPassword: string;
 }
-export const changePassword = (userId: number, req: ChangePasswordRequest) =>
+
+export const changePassword = (userId: string, req: ChangePasswordRequest) =>
   axiosPrivate.put<EmptyResponse>(`/user/${userId}/password`, req);
 
 // -------------------------------------------------------------------
-// Get user
-export interface GetUserResponse {
-  user: UserInfo;
-}
-export const getUser = (userId: number) => axios.get<GetUserResponse>(`/user/${userId}/profile`);
+// GetUserProfile
 
-// -------------------------------------------------------------------
-// List users
-export type UserOrderBy = 'username' | 'role' | 'isDeleted' | 'createAt';
-export interface UserItem {
-  id: number;
-  username: string;
-  email: string;
-  avatar: string;
-  postCount: number;
-  role: UserRole;
-  isDeleted: boolean;
-  createAt: Date;
+export interface UserProfile extends UserInfo {
+  starCount: string;
+  viewCount: string;
 }
-export interface ListUsersRequest extends PageOption {
-  orderBy: UserOrderBy;
-  keyword?: string;
+
+export interface GetUserProfileResponse {
+  user: UserProfile;
 }
-export interface ListUsersResponse {
-  total: number;
-  users: UserItem[];
-}
-export const listUsers = (req: ListUsersRequest) => axiosPrivate.get<ListUsersResponse>('/user', { params: req });
+
+export const getUserProfile = (userId: string, isLoggedIn: boolean) => {
+  if (isLoggedIn) {
+    return axiosPrivate.get<GetUserProfileResponse>(`/user/${userId}/profile`);
+  }
+  return axiosInstance.get<GetUserProfileResponse>(`/user/${userId}/profile`);
+};
