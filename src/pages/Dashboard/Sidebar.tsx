@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Box, Typography, Drawer, useMediaQuery, Stack } from '@mui/material';
+import { Avatar, Box, Typography, Drawer, useMediaQuery, Stack, Divider } from '@mui/material';
 import { CookieOutlined, PublishOutlined, SupervisorAccountOutlined } from '@mui/icons-material';
 
 import { DRAWER_WIDTH, APP_BAR_HEIGHT } from '@/themes/constants';
 import { IMenuConfig, User } from '@/api';
-import { NavListItem, Scrollbar } from '@/components';
+import { NavList, Scrollbar } from '@/components';
 import { useAppSelector } from '@/hooks';
 
 const menuConfig: IMenuConfig[] = [
   { id: 1, name: 'Overview', path: '/dashboard/overview', Icon: CookieOutlined },
-  { id: 1, name: 'Users', path: '/dashboard/users', Icon: SupervisorAccountOutlined },
-  { id: 2, name: 'Posts', path: '/dashboard/posts', Icon: PublishOutlined },
+  { id: 2, name: 'Users', path: '/dashboard/users', Icon: SupervisorAccountOutlined },
+  { id: 3, name: 'Posts', path: '/dashboard/posts', Icon: PublishOutlined },
 ];
 
 // -------------------------------------------------------------------
@@ -64,9 +64,10 @@ export default function DashboardSidebar({ open, onDrawerToggle }: IProps) {
             <Avatar alt="User" src={user.avatar} sx={{ width: 56, height: 56, mx: 'auto' }} />
             <Typography>{user.username}</Typography>
           </Stack>
-          {menuConfig.map((menu) => (
-            <NavListItem key={menu.id} menu={menu} />
-          ))}
+          <Divider />
+          <Box sx={{ px: 2 }}>
+            <NavList menus={menuConfig} />
+          </Box>
         </Scrollbar>
       </Drawer>
     </Box>

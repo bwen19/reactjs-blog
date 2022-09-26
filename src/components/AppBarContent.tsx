@@ -1,11 +1,23 @@
-import React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import { Box, Container, InputBase, Link, Stack, Toolbar, Typography } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import { LogoButton, NavLinkMui } from '@/components';
-import MenuPopper, { mainMenuConfig } from './MenuPopper';
+import React, { useEffect, useRef, useState } from 'react';
+import { alpha, styled, useTheme } from '@mui/material/styles';
+import { Box, Container, InputBase, Link, Stack, Toolbar, Typography, useMediaQuery } from '@mui/material';
+import {
+  CottageOutlined,
+  LibraryBooksOutlined,
+  TravelExploreOutlined,
+  MenuRounded,
+  Search as SearchIcon,
+} from '@mui/icons-material';
+import { IMenuConfig } from '@/api';
+import { CustomIconButton, LogoButton, MenuPopper, NavLinkMui, NavList } from '@/components';
 
 // -------------------------------------------------------------------
+
+const menuConfig: IMenuConfig[] = [
+  { id: 1, name: 'Home', path: '/', Icon: CottageOutlined },
+  { id: 2, name: 'Blog', path: '/blog', Icon: LibraryBooksOutlined },
+  { id: 3, name: 'Explore', path: '/explore', Icon: TravelExploreOutlined },
+];
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -43,6 +55,52 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+// ========================// PopperMenuIcon //======================== //
+
+function PopperMenuIcon() {
+  const [open, setOpen] = useState<boolean>(false);
+  const anchorRef = useRef<HTMLButtonElement>(null);
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event: Event | React.SyntheticEvent) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
+      return;
+    }
+    setOpen(false);
+  };
+
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = useRef(open);
+  useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current!.focus();
+    }
+    prevOpen.current = open;
+  }, [open]);
+
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('md'));
+  useEffect(() => {
+    if (matches) setOpen(false);
+  }, [matches]);
+
+  return (
+    <>
+      <CustomIconButton ref={anchorRef} onClick={handleToggle}>
+        <MenuRounded sx={{ fontSize: '1.6rem' }} />
+      </CustomIconButton>
+      <MenuPopper anchorRef={anchorRef} open={open} placement="bottom-start" onClose={handleClose}>
+        <Box sx={{ minWidth: 150 }}>
+          <NavList menus={menuConfig} onClose={handleClose} />
+        </Box>
+      </MenuPopper>
+    </>
+  );
+}
+
 // ========================// AppBarContent //======================== //
 
 interface IProps {
@@ -58,14 +116,14 @@ export default function AppBarContent({ children }: IProps) {
         </Typography>
 
         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-          <MenuPopper />
+          <PopperMenuIcon />
         </Box>
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
           <LogoButton />
         </Typography>
         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
           <Stack direction="row" spacing={2.5}>
-            {mainMenuConfig.map((item) => (
+            {menuConfig.map((item) => (
               <Link key={item.id} component={NavLinkMui} variant="subtitle1" to={item.path} sx={{ color: 'grey.100' }}>
                 {item.name}
               </Link>

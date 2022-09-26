@@ -51,8 +51,8 @@ export default function styleOverrides(theme: Theme) {
       styleOverrides: {
         root: {
           color: theme.palette.grey[700],
-          fontWeight: theme.typography.fontWeightLight,
-          minWidth: '32px',
+          fontWeight: theme.typography.fontWeightRegular,
+          minWidth: '36px',
         },
       },
     },

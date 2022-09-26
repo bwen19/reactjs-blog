@@ -11,9 +11,9 @@ import { fetchProfile } from '@/redux/userProfileSlice';
 import { AccountSection, AppBarOnScroll, AppBarContent, CustomIconButton } from '@/components';
 import { fetchFeaturedPosts } from '@/redux/featuredPostSlice';
 
-// ========================// MainLayout //======================== //
+// ========================// Main Page //======================== //
 
-export default function MainLayout() {
+export default function MainPage() {
   const dispatch = useAppDispatch();
 
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);

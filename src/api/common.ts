@@ -12,19 +12,6 @@ export enum Permission {
   ADMIN = 3,
 }
 
-export function role2Permission(role: UserRole): Permission {
-  switch (role) {
-    case 'user':
-      return Permission.USER;
-    case 'author':
-      return Permission.AUTHOR;
-    case 'admin':
-      return Permission.ADMIN;
-    default:
-      return Permission.GHOST;
-  }
-}
-
 export interface IMenuConfig {
   id: number;
   name: string;

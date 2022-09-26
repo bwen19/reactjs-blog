@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User, LoginResponse, autoLogin, logout, Permission, role2Permission } from '@/api';
-import { getToken, removeToken, saveToken } from '@/utils/localStorage';
+import { User, LoginResponse, autoLogin, logout, Permission } from '@/api';
+import { getToken, removeToken, saveToken, role2Permission } from '@/utils';
 
 // -------------------------------------------------------------------
 

@@ -1,23 +1,23 @@
 import { Navigate, RouteObject } from 'react-router-dom';
 
 import { LazyLoad } from '@/components';
-import MainLayout from '@/pages/Main/Layout';
+import MainPage from '.';
 
-const Home = LazyLoad(() => import('../pages/Main/Home'));
-const Blog = LazyLoad(() => import('../pages/Main/Blog'));
-const Explore = LazyLoad(() => import('../pages/Main/Explore'));
-const Post = LazyLoad(() => import('../pages/Main/Post'));
-const User = LazyLoad(() => import('../pages/Main/User'));
-const UserPosts = LazyLoad(() => import('../pages/Main/User/Posts'));
-const News = LazyLoad(() => import('../pages/Main/User/News'));
-const Followers = LazyLoad(() => import('../pages/Main/User/Followers'));
-const Followings = LazyLoad(() => import('../pages/Main/User/Followings'));
+const Home = LazyLoad(() => import('./Home'));
+const Blog = LazyLoad(() => import('./Blog'));
+const Explore = LazyLoad(() => import('./Explore'));
+const Post = LazyLoad(() => import('./Post'));
+const User = LazyLoad(() => import('./User'));
+const UserPosts = LazyLoad(() => import('./User/Posts'));
+const News = LazyLoad(() => import('./User/News'));
+const Followers = LazyLoad(() => import('./User/Followers'));
+const Followings = LazyLoad(() => import('./User/Followings'));
 
 // ========================// Main Routing //======================== //
 
 const MainRoutes: RouteObject = {
   path: '/',
-  element: <MainLayout />,
+  element: <MainPage />,
   children: [
     { path: '', element: <Home /> },
     { path: 'home', element: <Navigate to="/" /> },

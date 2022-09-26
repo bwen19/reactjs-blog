@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useAppDispatch } from './hooks';
 import { autoLoginThunk } from './redux/authSlice';
 import CustomThemeProvider from './themes';
-import Routes from './routes';
+import Routes from './Routes';
 import { AlertMessage, ConfirmDialog, LoginDialog, RegisterDialog } from './components';
 
 // ---------------------------------------------------------------------------
