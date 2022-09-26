@@ -10,6 +10,7 @@ import {
   ListItemIcon,
   ListItemText,
   Stack,
+  Tooltip,
   Typography,
   useMediaQuery,
 } from '@mui/material';
@@ -21,9 +22,9 @@ import {
   PersonOutlined,
   SettingsOutlined,
 } from '@mui/icons-material';
-import { IMenuConfig, Permission, User } from '@/api';
-import { useAppDispatch, useAppSelector } from '@/hooks';
 import { logoutThunk } from '@/redux/authSlice';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { IMenuConfig, Permission, User } from '@/api';
 import MenuPopper from './MenuPopper';
 import CustomIconButton from './CustomIconButton';
 import NavList from './NavList';
@@ -52,9 +53,11 @@ function ToolbarIcons({ menu, invisible, permission }: IProps) {
   }
 
   return (
-    <CustomIconButton component={Link} to={path} sx={{ pr: 5 }}>
-      <Icon sx={{ fontSize: '1.6rem' }} />
-    </CustomIconButton>
+    <Tooltip title={name}>
+      <CustomIconButton component={Link} to={path} sx={{ pr: 5 }}>
+        <Icon sx={{ fontSize: '1.6rem' }} />
+      </CustomIconButton>
+    </Tooltip>
   );
 }
 
@@ -107,7 +110,7 @@ function AccountPopper({ user, menus }: AccountPopperProps) {
       <CustomIconButton ref={anchorRef} onClick={handleToggle}>
         <Avatar alt="User" src={user.avatar} sx={{ width: 30, height: 30 }} />
       </CustomIconButton>
-      <MenuPopper anchorRef={anchorRef} open={open} placement="bottom-end" onClose={handleClose}>
+      <MenuPopper anchorEl={anchorRef.current} open={open} placement="bottom-end" onClose={handleClose}>
         <Box sx={{ minWidth: 210 }}>
           <UsernameWrapper>
             <Typography variant="body2" color="text.disabled">

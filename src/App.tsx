@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
-
-import { useAppDispatch } from './hooks';
 import { autoLoginThunk } from './redux/authSlice';
+import { useAppDispatch } from './hooks';
 import CustomThemeProvider from './themes';
 import Routes from './Routes';
 import { AlertMessage, ConfirmDialog, LoginDialog, RegisterDialog } from './components';
 
-// ---------------------------------------------------------------------------
+// ========================// App //======================== //
 
 export default function App() {
   const dispatch = useAppDispatch();

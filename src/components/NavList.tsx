@@ -4,7 +4,8 @@ import { IMenuConfig, Permission } from '@/api';
 import { NavLinkMui } from '@/components';
 import { useAppSelector } from '@/hooks';
 
-// ========================// NavItem //======================== //
+// -------------------------------------------------------------------
+// NavItem
 
 interface NavItemProps {
   menu: IMenuConfig;
@@ -31,7 +32,9 @@ function NavItem({ menu, permission }: NavItemProps) {
     </ListItemButton>
   );
 }
-// ========================// PopperNavItem //======================== //
+
+// -------------------------------------------------------------------
+// PopperNavItem
 
 interface PopperNavItemProps {
   menu: IMenuConfig;

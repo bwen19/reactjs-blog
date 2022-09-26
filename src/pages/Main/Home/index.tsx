@@ -1,14 +1,12 @@
 import { useEffect } from 'react';
 import { Box, Container, Fab, Grid } from '@mui/material';
 import { KeyboardArrowUp } from '@mui/icons-material';
-
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import ScrollTop from '@/components/ScrollTop';
-import { ImageBackDrop, FeaturedPostCard, PostCard } from '@/components';
-import Image from '@/assets/images/home.jpg';
 import { setNum } from '@/redux/featuredPostSlice';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { ImageBackDrop, FeaturedPostCard, PostCard, ScrollTop } from '@/components';
+import Image from '@/assets/images/home.jpg';
 
-// ---------------------------------------------------------------------------
+// ========================// Home //======================== //
 
 export default function Home() {
   const dispatch = useAppDispatch();

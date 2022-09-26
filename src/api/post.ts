@@ -2,6 +2,8 @@ import axiosInstance from './axiosInstance';
 import axiosPrivate from './axiosPrivate';
 import { Category, EmptyResponse, PageOrderOption, Tag, UserInfo } from './common';
 
+// -------------------------------------------------------------------
+
 export type PostStatus = 'publish' | 'review' | 'revise' | 'draft';
 
 export interface Post {
@@ -34,8 +36,7 @@ export interface PostItem {
   publishAt: string;
 }
 
-// ---------------------------------------------------------------------------
-// CreatePost
+// ========================// CreatePost //======================== //
 
 export interface CreatePostResponse {
   post: Post;
@@ -43,13 +44,11 @@ export interface CreatePostResponse {
 
 export const createPost = () => axiosPrivate.post<CreatePostResponse>('/post');
 
-// ---------------------------------------------------------------------------
-// DeletePost
+// ========================// DeletePost //======================== //
 
 export const deletePost = (postId: string) => axiosPrivate.delete<EmptyResponse>(`/post/${postId}`);
 
-// ---------------------------------------------------------------------------
-// UpdatePost
+// ========================// UpdatePost //======================== //
 
 export interface UpdatePostRequest {
   title?: string;
@@ -66,8 +65,7 @@ export interface UpdatePostResponse {
 export const updatePost = (postId: string, req: UpdatePostRequest) =>
   axiosPrivate.patch<UpdatePostResponse>(`/post/${postId}`, req);
 
-// ---------------------------------------------------------------------------
-// SubmitPost
+// ========================// SubmitPost //======================== //
 
 export interface SubmitPostRequest {
   postIds: string[];
@@ -75,8 +73,7 @@ export interface SubmitPostRequest {
 
 export const submitPost = (req: SubmitPostRequest) => axiosPrivate.post<EmptyResponse>('/post/submit', req);
 
-// ---------------------------------------------------------------------------
-// PublishPost
+// ========================// PublishPost //======================== //
 
 export interface PublishPostRequest {
   postIds: string[];
@@ -84,8 +81,7 @@ export interface PublishPostRequest {
 
 export const publishPost = (req: PublishPostRequest) => axiosPrivate.post<EmptyResponse>('/post/publish', req);
 
-// ---------------------------------------------------------------------------
-// WithdrawPost
+// ========================// WithdrawPost //======================== //
 
 export interface WithdrawPostRequest {
   postIds: string[];
@@ -93,8 +89,7 @@ export interface WithdrawPostRequest {
 
 export const withdrawPost = (req: WithdrawPostRequest) => axiosPrivate.post<EmptyResponse>('/post/withdraw', req);
 
-// ---------------------------------------------------------------------------
-// UpdatePostLabel
+// ========================// UpdatePostLabel //======================== //
 
 export interface UpdatePostLabelRequest {
   categoryIds: string[];
@@ -105,8 +100,7 @@ export interface UpdatePostLabelRequest {
 export const updatePostLabel = (postId: string, req: UpdatePostLabelRequest) =>
   axiosPrivate.patch<EmptyResponse>(`/post/admin/${postId}`, req);
 
-// ---------------------------------------------------------------------------
-// ListPosts
+// ========================// ListPosts //======================== //
 
 export type LPostOrderBy = 'publishAt' | 'updateAt' | 'viewCount';
 
@@ -121,8 +115,7 @@ export interface ListPostsResponse {
 
 export const listPosts = (req: ListPostsRequest) => axiosPrivate.get<ListPostsResponse>('/posts', { params: req });
 
-// ---------------------------------------------------------------------------
-// GetPost
+// ========================// GetPost //======================== //
 
 export interface GetPostResponse {
   post: Post;
@@ -130,8 +123,7 @@ export interface GetPostResponse {
 
 export const getPost = (postId: string) => axiosPrivate.get<GetPostResponse>(`/post/${postId}`);
 
-// ---------------------------------------------------------------------------
-// GetFeaturedPosts
+// ========================// GetFeaturedPosts //======================== //
 
 export interface GetFeaturedPostsRequest {
   num: number;
@@ -155,8 +147,7 @@ export interface GetFeaturedPostsResponse {
 export const getFeaturedPosts = (req: GetFeaturedPostsRequest) =>
   axiosInstance.get<GetFeaturedPostsResponse>('/postft', { params: req });
 
-// ---------------------------------------------------------------------------
-// GetPosts
+// ========================// GetPosts //======================== //
 
 export type GPostsOrderBy = 'publishAt' | 'viewCount';
 
@@ -188,8 +179,7 @@ export interface GetPostsResponse {
 
 export const getPosts = (req: GetPostsRequest) => axiosInstance.get<GetPostsResponse>('/post', { params: req });
 
-// ---------------------------------------------------------------------------
-// ReadPost
+// ========================// ReadPost //======================== //
 
 export interface RPost {
   id: string;
@@ -214,8 +204,7 @@ export const readPost = (postId: string, isLoggedIn: boolean) => {
   return axiosInstance.get<ReadPostResponse>(`/post/${postId}/read`);
 };
 
-// ---------------------------------------------------------------------------
-// StarPost
+// ========================// StarPost //======================== //
 
 export interface StarPostRequest {
   postId: string;

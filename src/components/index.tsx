@@ -1,7 +1,6 @@
 export { default as AccountSection } from './AccountSection';
-export { default as AppBarContent } from './AppBarContent';
+export { default as AppToolbar } from './AppToolbar';
 export { default as AlertMessage } from './AlertMessage';
-export { default as AppBarOnScroll } from './AppBarOnScroll';
 export { default as AuthGuard } from './AuthGuard';
 export { default as AuthorPostCard } from './AuthorPostCard';
 export { default as ImageBackDrop } from './ImageBackDrop';
@@ -21,6 +20,6 @@ export { default as NavLinkMui } from './NavLinkMui';
 export { default as PostCard } from './PostCard';
 export { default as Preview } from './Preview';
 export { default as RegisterDialog } from './RegisterDialog';
-export { default as Scrollbar } from './Scrollbar';
-export { default as ScrollTop } from './ScrollTop';
-export { default as ScrollTopOnMount } from './ScrollTopOnMount';
+export { default as SimpleScrollbar } from './SimpleScrollbar';
+export { ScrollTop, ScrollTopOnMount, AppBarOnScroll } from './ScrollWidget';
+export { Header, Sidebar, MainWrapper } from './AdminCollection';

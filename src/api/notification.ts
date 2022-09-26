@@ -1,13 +1,11 @@
 import axiosPrivate from './axiosPrivate';
 import { EmptyResponse, PageOption, User } from './common';
 
-// -------------------------------------------------------------------
-// MarkAllRead
+// ========================// MarkAllRead //======================== //
 
 export const markAllRead = () => axiosPrivate.put<EmptyResponse>('/notification/read');
 
-// -------------------------------------------------------------------
-// DeleteNotifs
+// ========================// DeleteNotifs //======================== //
 
 export interface DeleteNotifsRequest {
   notificationIds: string[];
@@ -16,8 +14,7 @@ export interface DeleteNotifsRequest {
 export const deleteNotifs = (req: DeleteNotifsRequest) =>
   axiosPrivate.delete<EmptyResponse>('/notification', { data: req });
 
-// -------------------------------------------------------------------
-// ListNotifs
+// ========================// ListNotifs //======================== //
 
 export interface ListNotifsRequest extends PageOption {
   kind: string;
@@ -43,8 +40,7 @@ export interface ListNotifsResponse {
 export const listNotifs = (req: ListNotifsRequest) =>
   axiosPrivate.get<ListNotifsResponse>('/notification', { params: req });
 
-// -------------------------------------------------------------------
-// LeaveMessage
+// ========================// LeaveMessage //======================== //
 
 export interface LeaveMessageRequest {
   title: string;
@@ -53,8 +49,7 @@ export interface LeaveMessageRequest {
 
 export const leaveMessage = (req: LeaveMessageRequest) => axiosPrivate.post<EmptyResponse>('/notification', req);
 
-// -------------------------------------------------------------------
-// ListMessages
+// ========================// ListMessages //======================== //
 
 export interface ListMessagesRequest extends PageOption {}
 
@@ -77,8 +72,7 @@ export interface ListMessagesResponse {
 export const listMessages = (req: ListMessagesRequest) =>
   axiosPrivate.get<ListMessagesResponse>('/notification/admin', { params: req });
 
-// -------------------------------------------------------------------
-// CheckMessages
+// ========================// CheckMessages //======================== //
 
 export interface CheckMessagesRequest {
   messageIds: string[];
@@ -87,8 +81,7 @@ export interface CheckMessagesRequest {
 
 export const checkMessages = (req: CheckMessagesRequest) => axiosPrivate.put<EmptyResponse>('/notification/admin', req);
 
-// -------------------------------------------------------------------
-// DeleteMessages
+// ========================// DeleteMessages //======================== //
 
 export interface DeleteMessagesRequest {
   messageIds: string[];

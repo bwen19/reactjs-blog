@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import { AppBar, Container, Paper } from '@mui/material';
-import { AccountSection, AppBarContent } from '@/components';
+import { AccountSection, AppToolbar } from '@/components';
 
 // -------------------------------------------------------------------
 
@@ -23,9 +23,9 @@ export default function Notifications() {
   return (
     <Wrapper>
       <AppBar color="dark">
-        <AppBarContent>
+        <AppToolbar>
           <AccountSection />
-        </AppBarContent>
+        </AppToolbar>
       </AppBar>
       <MainContainer maxWidth="lg">
         <Paper elevation={0} sx={{ height: 50 }}>

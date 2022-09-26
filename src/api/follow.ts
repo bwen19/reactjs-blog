@@ -2,8 +2,7 @@ import axiosInstance from './axiosInstance';
 import axiosPrivate from './axiosPrivate';
 import { EmptyResponse, PageOption, UserInfo } from './common';
 
-// -------------------------------------------------------------------
-// FollowUser
+// ========================// FollowUser //======================== //
 
 export interface FollowUserRequest {
   userId: string;
@@ -12,8 +11,7 @@ export interface FollowUserRequest {
 
 export const followUser = (req: FollowUserRequest) => axiosPrivate.post<EmptyResponse>('/follow', req);
 
-// -------------------------------------------------------------------
-// ListFollows
+// ========================// ListFollows //======================== //
 
 export interface ListFollowsRequest extends PageOption {
   userId: string;

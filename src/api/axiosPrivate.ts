@@ -1,9 +1,8 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Store } from '@reduxjs/toolkit';
-
-import { getToken } from '@/utils/localStorage';
 import { RootState } from '@/redux/store';
 import { setToken, showAuthDialog } from '@/redux/authSlice';
+import { getToken } from '@/utils/localStorage';
 import { BASE_URL, ErrType } from './axiosInstance';
 import { refresh } from './auth';
 
@@ -34,7 +33,6 @@ const processQueue = (error: any, token: string) => {
   });
 };
 
-// -------------------------------------------------------------------
 // Private Axios
 const axiosPrivate = axios.create({
   baseURL: BASE_URL,

@@ -20,7 +20,18 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-// -------------------------------------------------------------------
+const RegisterSchema = Yup.object().shape({
+  username: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Username is required'),
+  email: Yup.string()
+    .min(3, 'Too Short!')
+    .max(50, 'Too Long!')
+    .email('Must be a valid email')
+    .required('Email is required'),
+  password: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Password is required'),
+  passwordRepeat: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Repeat password is required'),
+});
+
+// ========================// RegisterDialog //======================== //
 
 export default function RegisterDialog() {
   const dispatch = useAppDispatch();
@@ -31,17 +42,6 @@ export default function RegisterDialog() {
   const handleShowPassword = () => setShowPassword(!showPassword);
 
   const { alertMsg } = useAlert();
-
-  const RegisterSchema = Yup.object().shape({
-    username: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Username is required'),
-    email: Yup.string()
-      .min(3, 'Too Short!')
-      .max(50, 'Too Long!')
-      .email('Must be a valid email')
-      .required('Email is required'),
-    password: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Password is required'),
-    passwordRepeat: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Repeat password is required'),
-  });
 
   const formik = useFormik({
     initialValues: {

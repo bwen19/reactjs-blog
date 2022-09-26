@@ -5,7 +5,7 @@ import { placement2transform } from '@/utils';
 // ========================// MenuPopper //======================== //
 
 interface IProps {
-  anchorRef: React.RefObject<HTMLButtonElement>;
+  anchorEl: HTMLElement | null;
   open: boolean;
   placement: PopperPlacementType;
   onClose: (event: Event | React.SyntheticEvent) => void;
@@ -13,13 +13,13 @@ interface IProps {
 }
 
 export default function MenuPopper(props: IProps) {
-  const { anchorRef, open, placement: pm, children, onClose } = props;
+  const { anchorEl, open, placement: pm, children, onClose } = props;
 
   return (
     <Popper
       placement={pm}
       open={open}
-      anchorEl={anchorRef.current}
+      anchorEl={anchorEl}
       transition
       disablePortal
       popperOptions={{

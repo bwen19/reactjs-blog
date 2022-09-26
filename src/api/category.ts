@@ -2,8 +2,7 @@ import axiosInstance from './axiosInstance';
 import axiosPrivate from './axiosPrivate';
 import { Category, Order } from './common';
 
-// -------------------------------------------------------------------
-// CreateCategory
+// ========================// CreateCategory //======================== //
 
 export interface CreateCategoryRequest {
   name: string;
@@ -16,8 +15,7 @@ export interface CreateCategoryResponse {
 export const createCategory = (req: CreateCategoryRequest) =>
   axiosPrivate.post<CreateCategoryResponse>('/category', req);
 
-// -------------------------------------------------------------------
-// DeleteCategories
+// ========================// DeleteCategories //======================== //
 
 export interface DeleteCategoriesRequest {
   categoryIds: string[];
@@ -25,8 +23,7 @@ export interface DeleteCategoriesRequest {
 
 export const deleteCategories = (req: DeleteCategoriesRequest) => axiosPrivate.delete('/category', { data: req });
 
-// -------------------------------------------------------------------
-// UpdateCategory
+// ========================// UpdateCategory //======================== //
 
 export interface UpdateCategoryRequest {
   name: string;
@@ -39,8 +36,7 @@ export interface UpdateCategoryResponse {
 export const updateCategory = (categoryId: string, req: UpdateCategoryRequest) =>
   axiosPrivate.put<UpdateCategoryResponse>(`/category/${categoryId}`, req);
 
-// -------------------------------------------------------------------
-// ListCategories
+// ========================// ListCategories //======================== //
 
 export type CategoryOrderBy = 'name' | '';
 
@@ -62,8 +58,8 @@ export interface ListCategoriesResponse {
 export const listCategories = (req: ListCategoriesRequest) =>
   axiosPrivate.get<ListCategoriesResponse>('/category', { params: req });
 
-// -------------------------------------------------------------------
-// GetCategories
+// ========================// GetCategories //======================== //
+
 export interface GetCategoriesResponse {
   categories: Category[];
 }

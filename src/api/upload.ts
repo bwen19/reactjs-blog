@@ -1,8 +1,7 @@
 import axiosPrivate from './axiosPrivate';
 import { User } from './common';
 
-// -------------------------------------------------------------------
-// Upload avatar
+// ========================// UploadAvatar //======================== //
 
 export interface UploadAvatarResponse {
   user: User;
@@ -16,8 +15,7 @@ export const uploadAvatar = (file: File) => {
   });
 };
 
-// -------------------------------------------------------------------
-// Upload post image
+// ========================// UploadPostImage //======================== //
 
 export interface UploadPostImageResponse {
   image: string;

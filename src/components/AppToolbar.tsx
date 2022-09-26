@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { alpha, styled, useTheme } from '@mui/material/styles';
-import { Box, Container, InputBase, Link, Stack, Toolbar, Typography, useMediaQuery } from '@mui/material';
+import { alpha, styled } from '@mui/material/styles';
+import { Box, Container, InputBase, Link, Stack, Toolbar, Typography } from '@mui/material';
 import {
   CottageOutlined,
   LibraryBooksOutlined,
@@ -55,9 +55,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-// ========================// PopperMenuIcon //======================== //
+// -------------------------------------------------------------------
+// MenuSection
 
-function PopperMenuIcon() {
+function MenuSection() {
   const [open, setOpen] = useState<boolean>(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
@@ -81,18 +82,12 @@ function PopperMenuIcon() {
     prevOpen.current = open;
   }, [open]);
 
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('md'));
-  useEffect(() => {
-    if (matches) setOpen(false);
-  }, [matches]);
-
   return (
     <>
       <CustomIconButton ref={anchorRef} onClick={handleToggle}>
         <MenuRounded sx={{ fontSize: '1.6rem' }} />
       </CustomIconButton>
-      <MenuPopper anchorRef={anchorRef} open={open} placement="bottom-start" onClose={handleClose}>
+      <MenuPopper anchorEl={anchorRef.current} open={open} placement="bottom-start" onClose={handleClose}>
         <Box sx={{ minWidth: 150 }}>
           <NavList menus={menuConfig} onClose={handleClose} />
         </Box>
@@ -101,13 +96,13 @@ function PopperMenuIcon() {
   );
 }
 
-// ========================// AppBarContent //======================== //
+// ========================// AppToolbar //======================== //
 
 interface IProps {
   children: React.ReactElement;
 }
 
-export default function AppBarContent({ children }: IProps) {
+export default function AppToolbar({ children }: IProps) {
   return (
     <Container maxWidth="lg">
       <Toolbar disableGutters>
@@ -115,8 +110,8 @@ export default function AppBarContent({ children }: IProps) {
           <LogoButton />
         </Typography>
 
-        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-          <PopperMenuIcon />
+        <Box sx={{ flexGrow: 1, display: { xs: 'block', md: 'none' } }}>
+          <MenuSection />
         </Box>
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
           <LogoButton />

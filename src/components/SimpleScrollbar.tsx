@@ -6,13 +6,13 @@ import { Box } from '@mui/material';
 
 // ---------------------------------------------------------------------------
 
-const StyledRoot = styled('div')(() => ({
+const Wrapper = styled('div')(() => ({
   flexGrow: 1,
   height: '100%',
   overflow: 'hidden',
 }));
 
-const StyledSimpleBar = styled(SimpleBarReact)(({ theme }) => ({
+const SimpleBar = styled(SimpleBarReact)(({ theme }) => ({
   maxHeight: '100%',
   '& .simplebar-scrollbar': {
     '&:before': {
@@ -33,14 +33,14 @@ const StyledSimpleBar = styled(SimpleBarReact)(({ theme }) => ({
   },
 }));
 
-// ---------------------------------------------------------------------------
+// ========================// SimpleScrollbar //======================== //
 
 interface IProps {
   children: React.ReactNode;
   sx: SxProps<Theme>;
 }
 
-export default function Scrollbar({ children, sx }: IProps) {
+export default function SimpleScrollbar({ children, sx }: IProps) {
   const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent;
 
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
@@ -50,10 +50,10 @@ export default function Scrollbar({ children, sx }: IProps) {
   }
 
   return (
-    <StyledRoot>
-      <StyledSimpleBar timeout={500} clickOnTrack={false} sx={sx}>
+    <Wrapper>
+      <SimpleBar timeout={500} clickOnTrack={false} sx={sx}>
         {children}
-      </StyledSimpleBar>
-    </StyledRoot>
+      </SimpleBar>
+    </Wrapper>
   );
 }

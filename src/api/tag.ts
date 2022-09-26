@@ -1,8 +1,7 @@
 import axiosPrivate from './axiosPrivate';
 import { PageOrderOption, Tag } from './common';
 
-// -------------------------------------------------------------------
-// CreateTag
+// ========================// CreateTag //======================== //
 
 export interface CreateTagRequest {
   name: string;
@@ -14,8 +13,7 @@ export interface CreateTagResponse {
 
 export const createTag = (req: CreateTagRequest) => axiosPrivate.post<CreateTagResponse>('/tag', req);
 
-// -------------------------------------------------------------------
-// DeleteTags
+// ========================// DeleteTags //======================== //
 
 export interface DeleteTagsRequest {
   tagIds: string[];
@@ -23,8 +21,7 @@ export interface DeleteTagsRequest {
 
 export const deleteTags = (req: DeleteTagsRequest) => axiosPrivate.delete('/tag', { data: req });
 
-// -------------------------------------------------------------------
-// UpdateTag
+// ========================// UpdateTag //======================== //
 
 export interface UpdateTagRequest {
   name: string;
@@ -37,8 +34,7 @@ export interface UpdateTagResponse {
 export const updateTag = (tagId: string, req: UpdateTagRequest) =>
   axiosPrivate.put<UpdateTagResponse>(`/tag/${tagId}`, req);
 
-// -------------------------------------------------------------------
-// ListTags
+// ========================// ListTags //======================== //
 
 export type TagOrderBy = 'name' | 'postCount' | '';
 
@@ -60,8 +56,7 @@ export interface ListTagsResponse {
 
 export const listTags = (req: ListTagsRequest) => axiosPrivate.get<ListTagsResponse>('/tag', { params: req });
 
-// -------------------------------------------------------------------
-// GetTag
+// ========================// GetTag //======================== //
 
 export interface GetTagResponse {
   tag: Tag;

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { ButtonBase, SvgIcon } from '@mui/material';
 import { ReactComponent as Logo } from '@/assets/images/logo.svg';
 
-// ---------------------------------------------------------------------------
+// ========================// LogoButton //======================== //
 
 export default function LogoButton() {
   return (

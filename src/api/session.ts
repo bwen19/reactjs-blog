@@ -11,8 +11,7 @@ export interface Session {
   expiresAt: Date;
 }
 
-// -------------------------------------------------------------------
-// DeleteSessions
+// ========================// DeleteSessions //======================== //
 
 export interface DeleteSessionsRequest {
   sessionIds: readonly string[];
@@ -21,13 +20,11 @@ export interface DeleteSessionsRequest {
 export const deleteSessions = (req: DeleteSessionsRequest) =>
   axiosPrivate.delete<EmptyResponse>('/session', { data: req });
 
-// -------------------------------------------------------------------
-// DeleteExpiredSessions
+// ========================// DeleteExpiredSessions //======================== //
 
 export const deleteExpiredSessions = () => axiosPrivate.delete<EmptyResponse>('/session/expired');
 
-// -------------------------------------------------------------------
-// ListSessions
+// ========================// ListSessions //======================== //
 
 export type SessionOrderBy = 'clientIp' | 'createAt' | 'expiresAt';
 

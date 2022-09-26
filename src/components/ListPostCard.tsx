@@ -40,14 +40,12 @@ const PostCountInfo = styled('div')(({ theme }) => ({
   color: theme.palette.grey[500],
 }));
 
-// ---------------------------------------------------------------------------
+// ========================// ListPostCard //======================== //
 
 interface IProps {
   post: GPostItem;
   onSelectTag: (tag: Tag) => void;
 }
-
-// ========================// FeaturedPostCard //======================== //
 
 export default function ListPostCard({ post, onSelectTag }: IProps) {
   const postInfo: IPostInfo[] = [

@@ -1,5 +1,4 @@
 import { useRoutes } from 'react-router-dom';
-
 import MainRoutes from './pages/Main/Routes';
 import NotificationsRoutes from './pages/Notifications/Routes';
 import SettingsRoutes from './pages/Settings/Routes';

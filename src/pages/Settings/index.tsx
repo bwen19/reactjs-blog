@@ -1,8 +1,8 @@
 import { Link, Outlet } from 'react-router-dom';
-import { styled } from '@mui/material/styles';
-import { AppBar, Box, Container, Paper, Tab } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+import { AppBar, Box, Container, Paper, Tab, useMediaQuery } from '@mui/material';
 import { LockOutlined, ManageAccountsOutlined, NotificationsOutlined } from '@mui/icons-material';
-import { AccountSection, AppBarContent, CustomTabs, NavList } from '@/components';
+import { AccountSection, AppToolbar, CustomTabs, NavList } from '@/components';
 import { useRouteMatch } from '@/hooks';
 import { IMenuConfig } from '@/api';
 
@@ -53,28 +53,23 @@ export default function Settings() {
   const routeMatch = useRouteMatch(['/settings/profile', '/settings/password', '/settings/notifications']);
   const currentTab = routeMatch?.pattern?.path;
 
+  const theme = useTheme();
+  const shown = useMediaQuery(theme.breakpoints.down('md'));
+
   return (
     <Wrapper>
       <AppBar color="dark">
-        <AppBarContent>
+        <AppToolbar>
           <AccountSection />
-        </AppBarContent>
+        </AppToolbar>
       </AppBar>
       <MainContainer maxWidth="md">
         <Paper elevation={0} sx={{ mb: 2, display: { sm: 'block', md: 'none' } }}>
           <CustomTabs value={currentTab} centered>
-            {menuConfig.map(({ id, value, path, Icon }) => (
-              <Tab
-                disableRipple
-                component={Link}
-                key={id}
-                // label={name}
-                value={value}
-                to={path}
-                icon={<Icon fontSize="small" />}
-                iconPosition="start"
-              />
-            ))}
+            {shown &&
+              menuConfig.map(({ id, value, path, Icon }) => (
+                <Tab disableRipple component={Link} key={id} value={value} to={path} icon={<Icon />} />
+              ))}
           </CustomTabs>
         </Paper>
         <Box sx={{ height: '100%', display: { xs: 'block', md: 'flex' } }}>

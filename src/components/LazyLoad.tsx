@@ -12,7 +12,7 @@ const ProgressWrapper = styled('div')({
   width: '100%',
 });
 
-// ---------------------------------------------------------------------------
+// ========================// LazyLoad //======================== //
 
 export default function LazyLoad(factory: () => Promise<{ default: React.ComponentType }>) {
   const Component = lazy(factory);

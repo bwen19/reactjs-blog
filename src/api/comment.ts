@@ -23,8 +23,7 @@ export interface Comment {
   createAt: string;
 }
 
-// -------------------------------------------------------------------
-// CreateComment
+// ========================// CreateComment //======================== //
 
 export interface CreateCommentRequest {
   postId: string;
@@ -44,13 +43,11 @@ export interface CreateCommentResponse {
 
 export const createComment = (req: CreateCommentRequest) => axiosPrivate.post<CreateCommentResponse>('/comment', req);
 
-// -------------------------------------------------------------------
-// DeleteComment
+// ========================// DeleteComment //======================== //
 
 export const delelteComment = (commentId: string) => axiosPrivate.delete<EmptyResponse>(`/comment/${commentId}`);
 
-// -------------------------------------------------------------------
-// ListComments
+// ========================// ListComments //======================== //
 
 export type CommentOrderBy = 'createAt' | 'starCount';
 
@@ -72,8 +69,7 @@ export const listComments = (req: ListCommentsRequest, isLoggedIn: boolean) => {
   return axiosInstance.get<ListCommentsResponse>('/comment', { params: req });
 };
 
-// -------------------------------------------------------------------
-// ListReplies
+// ========================// ListReplies //======================== //
 
 export interface ListRepliesRequest extends PageOrderOption {
   orderBy: CommentOrderBy;
@@ -92,8 +88,7 @@ export const listReplies = (req: ListRepliesRequest, isLoggedIn: boolean) => {
   return axiosInstance.get<ListRepliesResponse>('/comment/reply', { params: req });
 };
 
-// -------------------------------------------------------------------
-// StarComment
+// ========================// StarComment //======================== //
 
 export interface StarCommentRequest {
   commentId: string;

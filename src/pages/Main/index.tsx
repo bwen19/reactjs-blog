@@ -2,14 +2,13 @@ import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { AppBar, Box, Container, Typography } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
-
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { showAuthDialog } from '@/redux/authSlice';
 import { fetchPosts } from '@/redux/postSlice';
 import { fetchUserPosts } from '@/redux/userPostSlice';
 import { fetchProfile } from '@/redux/userProfileSlice';
-import { AccountSection, AppBarOnScroll, AppBarContent, CustomIconButton } from '@/components';
 import { fetchFeaturedPosts } from '@/redux/featuredPostSlice';
+import { AccountSection, AppBarOnScroll, AppToolbar, CustomIconButton } from '@/components';
 
 // ========================// Main Page //======================== //
 
@@ -52,7 +51,7 @@ export default function MainPage() {
       <Box id="back-to-top-anchor" sx={{ minHeight: 0 }} />
       <AppBarOnScroll>
         <AppBar>
-          <AppBarContent>
+          <AppToolbar>
             {isLoggedIn ? (
               <AccountSection />
             ) : (
@@ -60,7 +59,7 @@ export default function MainPage() {
                 <AccountCircle sx={{ fontSize: '1.6rem' }} />
               </CustomIconButton>
             )}
-          </AppBarContent>
+          </AppToolbar>
         </AppBar>
       </AppBarOnScroll>
       <Outlet />

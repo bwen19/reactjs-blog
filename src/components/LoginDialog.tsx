@@ -18,11 +18,10 @@ import {
   Typography,
 } from '@mui/material';
 import { LockOutlined, SwapHorizOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
-
-import { getLocalUser, saveLocalUser } from '@/utils/localStorage';
+import { closeAuthDialog, setAuth, switchAuthDialog } from '@/redux/authSlice';
 import { useAlert, useAppDispatch, useAppSelector } from '@/hooks';
 import { login, LoginRequest } from '@/api';
-import { closeAuthDialog, setAuth, switchAuthDialog } from '@/redux/authSlice';
+import { getLocalUser, saveLocalUser } from '@/utils/localStorage';
 
 // -------------------------------------------------------------------
 
@@ -35,7 +34,7 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-// -------------------------------------------------------------------
+// ========================// LoginDialog //======================== //
 
 export default function LoginDialog() {
   const dispatch = useAppDispatch();

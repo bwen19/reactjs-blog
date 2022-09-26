@@ -1,8 +1,7 @@
 import axios from './axiosInstance';
 import { User, EmptyResponse } from './common';
 
-// -------------------------------------------------------------------
-// Register
+// ========================// Register //======================== //
 
 export interface RegisterRequest {
   username: string;
@@ -16,8 +15,7 @@ export interface RegisterResponse {
 
 export const register = (req: RegisterRequest) => axios.post<RegisterResponse>('/auth/register', req);
 
-// -------------------------------------------------------------------
-// Login
+// ========================// Login //======================== //
 
 export interface LoginRequest {
   username?: string;
@@ -34,8 +32,7 @@ export interface LoginResponse {
 
 export const login = (req: LoginRequest) => axios.post<LoginResponse>('/auth/login', req);
 
-// -------------------------------------------------------------------
-// Auto login
+// ========================// AutoLogin //======================== //
 
 export interface AutoLoginRequest {
   refreshToken: string;
@@ -49,8 +46,7 @@ export interface AutoLoginResponse {
 
 export const autoLogin = (req: AutoLoginRequest) => axios.post<AutoLoginResponse>('/auth/autologin', req);
 
-// -------------------------------------------------------------------
-// Refresh
+// ========================// Refresh //======================== //
 
 interface RefreshTokenRequest {
   refreshToken: string;
@@ -62,8 +58,7 @@ interface RefreshTokenResponse {
 
 export const refresh = (req: RefreshTokenRequest) => axios.post<RefreshTokenResponse>('/auth/refresh', req);
 
-// -------------------------------------------------------------------
-// Logout
+// ========================// Logout //======================== //
 
 export interface LogoutRequest {
   refreshToken: string;

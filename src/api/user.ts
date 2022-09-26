@@ -2,8 +2,7 @@ import axiosInstance from './axiosInstance';
 import axiosPrivate from './axiosPrivate';
 import { UserInfo, User, EmptyResponse, UserRole, PageOrderOption } from './common';
 
-// -------------------------------------------------------------------
-// CreateUser
+// ========================// CreateUser //======================== //
 
 export interface CreateUserRequest {
   username: string;
@@ -14,8 +13,7 @@ export interface CreateUserRequest {
 
 export const createUser = (req: CreateUserRequest) => axiosPrivate.post<EmptyResponse>('/user', req);
 
-// -------------------------------------------------------------------
-// DeleteUsers
+// ========================// DeleteUsers //======================== //
 
 export interface DeleteUsersRequest {
   userIds: string[];
@@ -23,8 +21,7 @@ export interface DeleteUsersRequest {
 
 export const deleteUsers = (req: DeleteUsersRequest) => axiosPrivate.delete<EmptyResponse>('/user', { data: req });
 
-// -------------------------------------------------------------------
-// UpdateUser
+// ========================// UpdateUser //======================== //
 
 export interface UpdateUserRequest {
   username?: string;
@@ -37,8 +34,7 @@ export interface UpdateUserRequest {
 export const updateUser = (userId: string, req: UpdateUserRequest) =>
   axiosPrivate.patch<EmptyResponse>(`/user/${userId}`, req);
 
-// -------------------------------------------------------------------
-// ListUsers
+// ========================// ListUsers //======================== //
 
 export type UserOrderBy = 'username' | 'role' | 'deleted' | 'createAt';
 
@@ -65,8 +61,7 @@ export interface ListUsersResponse {
 
 export const listUsers = (req: ListUsersRequest) => axiosPrivate.get<ListUsersResponse>('/user', { params: req });
 
-// -------------------------------------------------------------------
-// ChangeProfile
+// ========================// ChangeProfile //======================== //
 
 export interface ChangeProfileRequest {
   username?: string;
@@ -81,8 +76,7 @@ export interface ChangeProfileResponse {
 export const changeProfile = (userId: string, req: ChangeProfileRequest) =>
   axiosPrivate.patch<ChangeProfileResponse>(`/user/${userId}/profile`, req);
 
-// -------------------------------------------------------------------
-// ChangePassword
+// ========================// ChangePassword //======================== //
 
 export interface ChangePasswordRequest {
   oldPassword: string;
@@ -92,8 +86,7 @@ export interface ChangePasswordRequest {
 export const changePassword = (userId: string, req: ChangePasswordRequest) =>
   axiosPrivate.put<EmptyResponse>(`/user/${userId}/password`, req);
 
-// -------------------------------------------------------------------
-// GetUserProfile
+// ========================// GetUserProfile //======================== //
 
 export interface UserProfile extends UserInfo {
   starCount: string;
