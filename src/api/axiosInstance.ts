@@ -14,7 +14,6 @@ export interface ErrType {
   details?: Detail[];
 }
 
-// -------------------------------------------------------------------
 // Axios instance
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

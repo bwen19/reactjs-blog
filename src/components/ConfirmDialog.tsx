@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useConfirm } from '@/hooks';
 
-// -------------------------------------------------------------------
+// ========================// ConfirmDialog //======================== //
 
 export default function ConfirmDialog() {
   const { open, message, onConfirm, onCancel } = useConfirm();

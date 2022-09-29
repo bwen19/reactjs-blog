@@ -5,7 +5,7 @@ import { StyledEngineProvider, ThemeProvider, ThemeOptions } from '@mui/material
 import palette from './palette';
 import componentsOverrides from './componentsOverrides';
 
-// ---------------------------------------------------------------------------
+// -------------------------------------------------------------------
 
 interface CustomThemeProviderProps {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ export default function CustomThemeProvider(props: CustomThemeProviderProps) {
           xs: 0,
           sm: 600,
           md: 960,
-          lg: 1200,
+          lg: 1100,
           xl: 1536,
         },
       },

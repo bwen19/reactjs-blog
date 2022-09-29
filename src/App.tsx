@@ -1,16 +1,11 @@
 import { useEffect } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-
-import Routes from './routes';
-import CustomThemeProvider from './themes';
-import { useAppDispatch } from './hooks';
 import { autoLoginThunk } from './redux/authSlice';
-import ConfirmDialog from './components/ConfirmDialog';
-import AlertMessage from './components/AlertMessage';
-import LoginDialog from './components/LoginDialog';
-import RegisterDialog from './components/RegisterDialog';
+import { useAppDispatch } from './hooks';
+import CustomThemeProvider from './themes';
+import Routes from './Routes';
+import { AlertMessage, ConfirmDialog, LoginDialog, RegisterDialog } from './components';
 
-// ---------------------------------------------------------------------------
+// ========================// App //======================== //
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -20,14 +15,12 @@ export default function App() {
   }, [dispatch]);
 
   return (
-    <BrowserRouter>
-      <CustomThemeProvider>
-        <Routes />
-        <AlertMessage />
-        <ConfirmDialog />
-        <LoginDialog />
-        <RegisterDialog />
-      </CustomThemeProvider>
-    </BrowserRouter>
+    <CustomThemeProvider>
+      <Routes />
+      <AlertMessage />
+      <ConfirmDialog />
+      <LoginDialog />
+      <RegisterDialog />
+    </CustomThemeProvider>
   );
 }

@@ -1,11 +1,11 @@
 export default function themPalette() {
   return {
     neutral: {
-      main: '#fff',
-      contrastText: '#2d3948',
+      main: '#64748B',
+      contrastText: '#fff',
     },
     dark: {
-      main: '#20232a',
+      main: '#222734',
       contrastText: '#ffffff',
     },
     // action: {

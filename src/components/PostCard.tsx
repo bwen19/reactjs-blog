@@ -1,105 +1,132 @@
-import { useNavigate } from 'react-router-dom';
-import { Avatar, Box, Card, CardContent, CardMedia, Chip, Divider, Stack, Typography } from '@mui/material';
-import { CalendarMonthOutlined, VisibilityOutlined } from '@mui/icons-material';
+import { Link as RouterLink } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
+import { Avatar, Box, Card, CardContent, Link, Typography } from '@mui/material';
+import { SmsRounded, SvgIconComponent, ThumbUpRounded, VisibilityRounded } from '@mui/icons-material';
+import { GPostItem } from '@/api';
+import { fDate } from '@/utils';
+import avatarShapeSrc from '@/assets/images/avatar-shape.svg';
 
-import { Post } from '@/api';
+// -------------------------------------------------------------------
 
-// ---------------------------------------------------------------------------
+const MainCard = styled(Card)(({ theme }) => ({
+  position: 'relative',
+  transition: theme.transitions.create(['boxShadow', 'transform'], {
+    duration: theme.transitions.duration.standard,
+  }),
+  '&:hover': {
+    boxShadow: theme.shadows[16],
+    transform: 'scale(1.02)',
+  },
+}));
+
+const AuthorAvatar = styled(Avatar)(({ theme }) => ({
+  position: 'absolute',
+  left: 30,
+  bottom: -18,
+  width: 36,
+  height: 36,
+  backgroundColor: theme.palette.warning.main,
+  textDecoration: 'none',
+})) as typeof Avatar;
+
+const CoverImage = styled('img')({
+  position: 'absolute',
+  top: 0,
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+});
+
+const PostTitle = styled(Link)(({ theme }) => ({
+  overflow: 'hidden',
+  overflowWrap: 'break-word',
+  textOverflow: 'ellipsis',
+  WebkitLineClamp: 2,
+  display: '-webkit-box',
+  WebkitBoxOrient: 'vertical',
+  color: theme.palette.text.primary,
+})) as typeof Link;
+
+interface IPostInfo {
+  key: number;
+  num: string;
+  Icon: SvgIconComponent;
+}
+
+const PostCountInfo = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'flex-end',
+  marginTop: theme.spacing(1),
+  color: theme.palette.grey[500],
+}));
+
+// ========================// PostCard //======================== //
 
 interface IProps {
-  post: Post;
+  post: GPostItem;
 }
 
 export default function PostCard({ post }: IProps) {
-  const navigate = useNavigate();
-
-  const handleReadPost = () => {
-    navigate(`/post/${post.id}`);
-  };
-
-  const handleViewAuthor = () => {
-    navigate(`/user/${post.author.id}`);
-  };
-
-  const handleViewCategory = (category: string) => {
-    console.log(category);
-  };
-
-  const handleViewTag = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-  };
+  const postInfo: IPostInfo[] = [
+    { key: 0, num: post.commentCount, Icon: SmsRounded },
+    { key: 1, num: post.viewCount, Icon: VisibilityRounded },
+    { key: 2, num: post.starCount, Icon: ThumbUpRounded },
+  ];
 
   return (
-    <Card elevation={0} sx={{ mb: 1 }}>
-      <CardContent sx={{ minWidth: 0 }}>
-        <Stack direction="row" alignItems="flex-start">
-          <Chip
-            color="secondary"
-            label={post.categories[0]}
-            onClick={() => handleViewCategory(post.categories[0])}
-            size="small"
-            sx={{ mr: 1, mt: 0.5 }}
-          />
-          <Typography
-            variant="h6"
-            onClick={handleReadPost}
-            sx={{ cursor: 'pointer', '&:hover': { color: 'primary.dark' } }}
-          >
-            {post.title}
-          </Typography>
-        </Stack>
-        <Box sx={{ display: 'flex', mt: 0.5 }}>
-          <Box sx={{ flex: 1 }}>
-            <Box color="text.secondary" sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar alt="Author avatar" src={post.author.avatar} sx={{ width: 20, height: 20, mr: 0.5 }} />
-              <Typography
-                component="span"
-                variant="subtitle1"
-                onClick={handleViewAuthor}
-                sx={{ cursor: 'pointer', '&:hover': { color: 'primary.dark' } }}
-              >
-                {post.author.username}
-              </Typography>
-              <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 1.5 }} />
-              <CalendarMonthOutlined color="warning" sx={{ fontSize: 16, mr: 0.5 }} />
-              <Typography component="span" variant="subtitle1">
-                {post.publishAt}
-              </Typography>
-              <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 1.5 }} />
-              <VisibilityOutlined color="success" sx={{ fontSize: 18, mr: 0.5 }} />
-              <Typography component="span" variant="subtitle1">
-                {post.readCount}
-              </Typography>
-            </Box>
-
-            <Typography
-              variant="subtitle1"
-              gutterBottom
-              color="text.secondary"
+    <MainCard>
+      <Box
+        sx={{
+          position: 'relative',
+          pt: { xs: 'calc(100% * 1 / 2)', sm: 'calc(100% * 1 / 2)', md: 'calc(100% * 3 / 5)' },
+        }}
+      >
+        <RouterLink to={`/post/${post.id}`}>
+          <CoverImage alt={post.title} src={post.coverImage} />
+        </RouterLink>
+        <Box
+          sx={{
+            width: 96,
+            height: 38,
+            position: 'absolute',
+            bottom: -16,
+            color: 'background.paper',
+            bgcolor: 'currentcolor',
+            mask: `url(${avatarShapeSrc}) no-repeat center / contain`,
+            WebkitMask: `url(${avatarShapeSrc}) no-repeat center / contain`,
+          }}
+        />
+        <AuthorAvatar
+          component={RouterLink}
+          to={`/user/${post.author.id}`}
+          alt={post.author.username}
+          src={post.author.avatar}
+        />
+      </Box>
+      <CardContent sx={{ pt: 4 }}>
+        <Typography gutterBottom variant="body2" color="grey.500">
+          {fDate(post.publishAt)}
+        </Typography>
+        <PostTitle component={RouterLink} to={`/post/${post.id}`} variant="subtitle1">
+          {post.title}
+        </PostTitle>
+        <PostCountInfo>
+          {postInfo.map(({ key, num, Icon }) => (
+            <Box
+              key={key}
               sx={{
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
+                display: 'flex',
+                alignItems: 'center',
+                ml: key === 0 ? 0 : 1.5,
               }}
             >
-              {post.description}
-            </Typography>
-            <Stack direction="row" spacing={1}>
-              {post.tags.map((tag) => (
-                <Chip key={tag} label={tag} variant="outlined" color="success" size="small" onClick={handleViewTag} />
-              ))}
-            </Stack>
-          </Box>
-          <CardMedia
-            component="img"
-            sx={{ width: 150, height: 100, ml: 2, display: { xs: 'none', sm: 'block' } }}
-            image={post.coverImage}
-            alt="Post cover image"
-          />
-        </Box>
+              <Icon sx={{ width: 16, height: 16, mr: 0.5 }} />
+              <Typography variant="body2">{num}</Typography>
+            </Box>
+          ))}
+        </PostCountInfo>
       </CardContent>
-    </Card>
+    </MainCard>
   );
 }

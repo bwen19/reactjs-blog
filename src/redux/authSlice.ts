@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User, LoginResponse, autoLogin, logout } from '@/api';
-import { getToken, removeToken, saveToken } from '@/utils/localStorage';
+import { User, LoginResponse, autoLogin, logout, Permission } from '@/api';
+import { getToken, removeToken, saveToken, role2Permission } from '@/utils';
 
 // -------------------------------------------------------------------
 
-interface AuthState {
+export interface AuthState {
   isLoggedIn: boolean;
   accessToken: string;
   authUser: User | null;
+  permission: Permission;
   unreadCount: number;
   open: boolean;
   openLogin: boolean;
@@ -17,6 +18,7 @@ const initialState: AuthState = {
   isLoggedIn: false,
   accessToken: '',
   authUser: null,
+  permission: Permission.GHOST,
   unreadCount: 0,
   open: false,
   openLogin: true,
@@ -24,6 +26,8 @@ const initialState: AuthState = {
 
 export const autoLoginThunk = createAsyncThunk('auth/autoLogin', async () => {
   const refreshToken = getToken();
+  if (!refreshToken) return null;
+
   const { data } = await autoLogin({ refreshToken });
   return data;
 });
@@ -41,6 +45,7 @@ export const authSlice = createSlice({
       state.isLoggedIn = true;
       const { user, accessToken, refreshToken, unreadCount } = action.payload;
       state.authUser = user;
+      state.permission = role2Permission(user.role);
       state.accessToken = `Bearer ${accessToken}`;
       saveToken(refreshToken);
       state.unreadCount = Number(unreadCount);
@@ -51,16 +56,18 @@ export const authSlice = createSlice({
     },
     setUser: (state, action: PayloadAction<User>) => {
       state.authUser = action.payload;
+      state.permission = role2Permission(action.payload.role);
     },
     removeAuth: (state) => {
       state.isLoggedIn = false;
       state.authUser = null;
+      state.permission = Permission.GHOST;
       state.accessToken = '';
       removeToken();
     },
-    showAuthDialog: (state, action: PayloadAction<boolean>) => {
+    showAuthDialog: (state) => {
       state.open = true;
-      state.openLogin = action.payload;
+      state.openLogin = true;
     },
     closeAuthDialog: (state) => {
       state.open = false;
@@ -78,11 +85,14 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(autoLoginThunk.fulfilled, (state, action) => {
-        state.isLoggedIn = true;
-        const { user, accessToken, unreadCount } = action.payload;
-        state.authUser = user;
-        state.accessToken = `Bearer ${accessToken}`;
-        state.unreadCount = Number(unreadCount);
+        if (action.payload) {
+          state.isLoggedIn = true;
+          const { user, accessToken, unreadCount } = action.payload;
+          state.authUser = user;
+          state.permission = role2Permission(user.role);
+          state.accessToken = `Bearer ${accessToken}`;
+          state.unreadCount = Number(unreadCount);
+        }
       })
       .addCase(autoLoginThunk.rejected, (state) => {
         authSlice.caseReducers.removeAuth(state);

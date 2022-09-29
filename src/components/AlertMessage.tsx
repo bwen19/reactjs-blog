@@ -10,7 +10,7 @@ const forwardFunc: ForwardRefRenderFunction<HTMLDivElement, AlertProps> = (props
 
 const AlertBar = forwardRef<HTMLDivElement, AlertProps>(forwardFunc);
 
-// -------------------------------------------------------------------
+// ========================// AlertMessage //======================== //
 
 export default function AlertMessage() {
   const { open, message, severity, alertId, onClose } = useAlert();

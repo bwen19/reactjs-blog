@@ -1,5 +1,7 @@
 import axiosPrivate from './axiosPrivate';
-import { EmptyResponse, PageOption } from './common';
+import { EmptyResponse, PageOrderOption } from './common';
+
+// -------------------------------------------------------------------
 
 export interface Session {
   id: string;
@@ -9,27 +11,29 @@ export interface Session {
   expiresAt: Date;
 }
 
-// -------------------------------------------------------------------
-// Delete session
+// ========================// DeleteSessions //======================== //
+
 export interface DeleteSessionsRequest {
   sessionIds: readonly string[];
 }
+
 export const deleteSessions = (req: DeleteSessionsRequest) =>
   axiosPrivate.delete<EmptyResponse>('/session', { data: req });
 
-// -------------------------------------------------------------------
-// Delete expired sessions
+// ========================// DeleteExpiredSessions //======================== //
+
 export const deleteExpiredSessions = () => axiosPrivate.delete<EmptyResponse>('/session/expired');
 
-// -------------------------------------------------------------------
-// List sessions
-export type SessionOrderBy = 'userId' | 'clientIp' | 'createAt' | 'expiresAt';
+// ========================// ListSessions //======================== //
 
-export interface ListSessionsRequest extends PageOption {
+export type SessionOrderBy = 'clientIp' | 'createAt' | 'expiresAt';
+
+export interface ListSessionsRequest extends PageOrderOption {
   orderBy: SessionOrderBy;
 }
+
 export interface ListSessionsResponse {
-  total: number;
+  total: string;
   sessions: Session[];
 }
 

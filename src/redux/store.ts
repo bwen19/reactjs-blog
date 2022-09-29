@@ -1,17 +1,23 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
-import postsReducer from './postsSlice';
-import confirmReducer from './confirmSlice';
 import alertReducer from './alertSlice';
+import confirmReducer from './confirmSlice';
+import postReducer from './postSlice';
+import featuredPostReducer from './featuredPostSlice';
+import userProfileReducer from './userProfileSlice';
+import userPostReducer from './userPostSlice';
 
 // -------------------------------------------------------------------
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    posts: postsReducer,
-    confirm: confirmReducer,
     alert: alertReducer,
+    confirm: confirmReducer,
+    post: postReducer,
+    featuredPost: featuredPostReducer,
+    userProfile: userProfileReducer,
+    userPost: userPostReducer,
   },
 });
 
