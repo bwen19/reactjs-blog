@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FetchStatus, getPosts, GetPostsRequest, GPostItem } from '@/api';
+import { FetchBase, getPosts, GetPostsRequest, GPostItem } from '@/api';
 
-interface UserPostState extends FetchStatus {
-  params: GetPostsRequest;
+interface UserPostState extends FetchBase<GetPostsRequest> {
   total: number;
   posts: GPostItem[];
 }
@@ -10,7 +9,7 @@ interface UserPostState extends FetchStatus {
 const initialState: UserPostState = {
   status: 'succeeded',
   error: '',
-  params: {
+  param: {
     pageId: 1,
     pageSize: 15,
     order: 'desc',
@@ -23,7 +22,7 @@ const initialState: UserPostState = {
 
 export const fetchUserPosts = createAsyncThunk('user/fetchPosts', async (arg, { getState }) => {
   const { userPost } = getState() as { userPost: UserPostState };
-  const { data } = await getPosts(userPost.params);
+  const { data } = await getPosts(userPost.param);
   return data;
 });
 
@@ -31,8 +30,8 @@ export const userPostSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setParams: (state, action: PayloadAction<Partial<GetPostsRequest>>) => {
-      state.params = { ...state.params, ...action.payload };
+    setParam: (state, action: PayloadAction<Partial<GetPostsRequest>>) => {
+      state.param = { ...state.param, ...action.payload };
       state.status = 'idle';
     },
   },
@@ -53,5 +52,5 @@ export const userPostSlice = createSlice({
   },
 });
 
-export const { setParams } = userPostSlice.actions;
+export const { setParam } = userPostSlice.actions;
 export default userPostSlice.reducer;

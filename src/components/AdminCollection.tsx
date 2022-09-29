@@ -106,6 +106,9 @@ export const MainWrapper = styled('main', { shouldForwardProp: (prop) => prop !=
     paddingBottom: theme.spacing(4),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      paddingTop: theme.spacing(12),
+    },
     [theme.breakpoints.up('md')]: {
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3),

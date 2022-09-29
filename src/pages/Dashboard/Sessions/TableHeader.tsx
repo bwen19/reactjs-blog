@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
-import { Session, SessionOrderBy } from '@/api';
-import { useSessionsContext } from './sessionsState';
+import { SessionAction, SessionState } from '@/hooks';
+import { Session, SessionOrderBy, TableHeadCell } from '@/api';
 
 // -------------------------------------------------------------------
 
@@ -17,14 +17,7 @@ const visuallyHidden = {
   clip: 'rect(0 0 0 0)',
 };
 
-interface HeadCell {
-  id: keyof Session | 'action';
-  label: string;
-  sortable?: boolean;
-  align: 'left' | 'right' | 'center';
-}
-
-const headCells: readonly HeadCell[] = [
+const headCells: readonly TableHeadCell<Session>[] = [
   {
     id: 'userAgent',
     label: 'Agent',
@@ -55,11 +48,19 @@ const headCells: readonly HeadCell[] = [
   },
 ];
 
-// -------------------------------------------------------------------
+// ========================// TableHeader //======================== //
 
-export default function SessionsTableHead() {
-  const { state, dispatch } = useSessionsContext();
-  const { sessions, selected, order, orderBy } = state;
+interface IProps {
+  state: SessionState;
+  dispatch: React.Dispatch<SessionAction>;
+}
+
+export default function TableHeader({ state, dispatch }: IProps) {
+  const {
+    param: { order, orderBy },
+    sessions,
+    selected,
+  } = state;
   const rowCount = sessions.length;
   const numSelected = selected.length;
 
@@ -74,7 +75,7 @@ export default function SessionsTableHead() {
 
   const createSortHandler = (property: SessionOrderBy) => {
     const isAsc = orderBy === property && order === 'asc';
-    dispatch({ type: 'setSort', order: isAsc ? 'desc' : 'asc', orderBy: property });
+    dispatch({ type: 'setParam', param: { order: isAsc ? 'desc' : 'asc', orderBy: property } });
   };
 
   return (

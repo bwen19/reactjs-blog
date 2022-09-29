@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Box, Zoom, useScrollTrigger } from '@mui/material';
 
 // ========================// ScrollTop //======================== //
@@ -36,9 +37,11 @@ export function ScrollTop({ children }: ScrollTopProps) {
 // ========================// ScrollTopOnMount //======================== //
 
 export function ScrollTopOnMount() {
+  const { pathname } = useLocation();
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [pathname]);
 
   return null;
 }

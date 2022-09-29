@@ -15,7 +15,7 @@ export { default as LoginDialog } from './LoginDialog';
 export { default as LogoButton } from './LogoButton';
 export { default as Markdown } from './Markdown';
 export { default as MenuPopper } from './MenuPopper';
-export { default as NavList } from './NavList';
+export * from './NavList';
 export { default as NavLinkMui } from './NavLinkMui';
 export { default as PostCard } from './PostCard';
 export { default as Preview } from './Preview';

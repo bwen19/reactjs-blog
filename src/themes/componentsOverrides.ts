@@ -30,6 +30,7 @@ export default function styleOverrides(theme: Theme) {
           color: theme.palette.grey[700],
           paddingTop: '10px',
           paddingBottom: '10px',
+          borderRadius: 8,
           '&.Mui-selected': {
             color: theme.palette.primary.main,
             backgroundColor: alpha(theme.palette.primary.light, 0.2),
@@ -39,6 +40,7 @@ export default function styleOverrides(theme: Theme) {
             },
           },
           '&:hover': {
+            color: theme.palette.primary.main,
             backgroundColor: alpha(theme.palette.primary.light, 0.2),
             '& .MuiListItemIcon-root': {
               color: theme.palette.primary.main,

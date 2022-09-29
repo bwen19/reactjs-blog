@@ -74,7 +74,6 @@ export default function ListPostCard({ post, onSelectTag }: IProps) {
           <Typography component="span" variant="body1" color="grey.500">
             {fDate(post.publishAt)}
           </Typography>
-          <Divider orientation="vertical" variant="middle" flexItem sx={{ mx: 1 }} />
         </Box>
         <Box>
           <PostTitle component={RouterLink} to={`/post/${post.id}`} variant="h6">

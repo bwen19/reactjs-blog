@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Container, InputBase, Link, Stack, Toolbar, Typography } from '@mui/material';
+import { Box, Container, InputBase, Link, List, Stack, Toolbar, Typography } from '@mui/material';
 import {
   CottageOutlined,
   LibraryBooksOutlined,
@@ -8,12 +9,12 @@ import {
   MenuRounded,
   Search as SearchIcon,
 } from '@mui/icons-material';
-import { IMenuConfig } from '@/api';
-import { CustomIconButton, LogoButton, MenuPopper, NavLinkMui, NavList } from '@/components';
+import { IMenuBase } from '@/api';
+import { CustomIconButton, LogoButton, MenuPopper, NavLinkMui, PopperNavItem } from '@/components';
 
 // -------------------------------------------------------------------
 
-const menuConfig: IMenuConfig[] = [
+const menuConfig: IMenuBase[] = [
   { id: 1, name: 'Home', path: '/', Icon: CottageOutlined },
   { id: 2, name: 'Blog', path: '/blog', Icon: LibraryBooksOutlined },
   { id: 3, name: 'Explore', path: '/explore', Icon: TravelExploreOutlined },
@@ -59,6 +60,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 // MenuSection
 
 function MenuSection() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
@@ -71,6 +73,11 @@ function MenuSection() {
       return;
     }
     setOpen(false);
+  };
+
+  const handleClick = (path: string) => (event: Event | React.SyntheticEvent) => {
+    navigate(path);
+    handleClose(event);
   };
 
   // return focus to the button when we transitioned from !open -> open
@@ -88,9 +95,11 @@ function MenuSection() {
         <MenuRounded sx={{ fontSize: '1.6rem' }} />
       </CustomIconButton>
       <MenuPopper anchorEl={anchorRef.current} open={open} placement="bottom-start" onClose={handleClose}>
-        <Box sx={{ minWidth: 150 }}>
-          <NavList menus={menuConfig} onClose={handleClose} />
-        </Box>
+        <List component="nav" sx={{ minWidth: 150 }}>
+          {menuConfig.map((menu) => (
+            <PopperNavItem key={menu.id} menu={menu} onClick={handleClick(menu.path)} fullWidth />
+          ))}
+        </List>
       </MenuPopper>
     </>
   );
@@ -104,7 +113,7 @@ interface IProps {
 
 export default function AppToolbar({ children }: IProps) {
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="xl">
       <Toolbar disableGutters>
         <Typography variant="h6" noWrap component="div" sx={{ mr: 6, display: { xs: 'none', md: 'flex' } }}>
           <LogoButton />

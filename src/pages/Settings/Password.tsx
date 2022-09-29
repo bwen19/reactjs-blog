@@ -1,27 +1,27 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Box, Button, IconButton, InputAdornment, Paper, Stack, TextField } from '@mui/material';
+import { Box, Button, Divider, IconButton, InputAdornment, Stack, TextField, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-
-import { ChangePasswordRequest, changePassword } from '@/api';
 import { useAlert, useAppSelector } from '@/hooks';
+import { ChangePasswordRequest, changePassword } from '@/api';
 
 // -------------------------------------------------------------------
 
+const PasswordSchema = Yup.object().shape({
+  oldPassword: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Password is required'),
+  newPassword: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Password is required'),
+  newPasswordRepeat: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Password is required'),
+});
+
+// ========================// Password //======================== //
+
 export default function Password() {
   const userId = useAppSelector((state) => state.auth.authUser?.id) as string;
+  const { alertMsg } = useAlert();
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
-
-  const { alertMsg } = useAlert();
-
-  const ProfileSchema = Yup.object().shape({
-    oldPassword: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Password is required'),
-    newPassword: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Password is required'),
-    newPasswordRepeat: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Password is required'),
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -29,7 +29,7 @@ export default function Password() {
       newPassword: '',
       newPasswordRepeat: '',
     },
-    validationSchema: ProfileSchema,
+    validationSchema: PasswordSchema,
     onSubmit: async (values) => {
       if (values.newPassword !== values.newPasswordRepeat) {
         alertMsg('The repeated password is incorrect', 'warning');
@@ -56,15 +56,19 @@ export default function Password() {
   const { errors, touched, isSubmitting, handleSubmit, getFieldProps } = formik;
 
   return (
-    <Paper elevation={0} sx={{ py: 3, width: '100%' }}>
+    <>
+      <Typography variant="h6" sx={{ mb: 2, ml: 1 }}>
+        Change password
+      </Typography>
+      <Divider />
       <Box
-        sx={{ mx: 'auto', maxWidth: 360, width: '100%', height: '100%' }}
+        sx={{ maxWidth: 360, mx: 'auto', mt: 6, mb: 2, px: 2 }}
         component="form"
         autoComplete="off"
         noValidate
         onSubmit={handleSubmit}
       >
-        <Stack spacing={3} alignItems="center" sx={{ mt: 3, mb: 5 }}>
+        <Stack spacing={4} alignItems="center">
           <TextField
             fullWidth
             autoComplete="current-password"
@@ -120,10 +124,10 @@ export default function Password() {
             helperText={touched.newPasswordRepeat && errors.newPasswordRepeat}
           />
           <Button size="large" type="submit" variant="contained" disabled={isSubmitting}>
-            Change Password
+            Save changes
           </Button>
         </Stack>
       </Box>
-    </Paper>
+    </>
   );
 }

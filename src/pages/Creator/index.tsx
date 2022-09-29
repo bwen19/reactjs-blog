@@ -1,22 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Box, Typography, Stack, Divider, useMediaQuery } from '@mui/material';
-import { CottageOutlined, LibraryBooksOutlined } from '@mui/icons-material';
-import { IMenuConfig, User } from '@/api';
-import { useAppSelector } from '@/hooks';
-import { Header, Sidebar, MainWrapper, NavList } from '@/components';
+import { Box, useMediaQuery, Button, List } from '@mui/material';
+import { CottageOutlined, Inventory2Outlined, LibraryBooksOutlined } from '@mui/icons-material';
+import { IMenuBase } from '@/api';
+import { Header, Sidebar, MainWrapper, NavItem } from '@/components';
 
 // -------------------------------------------------------------------
 
-const menuConfig: IMenuConfig[] = [
+const menuConfig: IMenuBase[] = [
   { id: 1, name: 'Home', path: '/creator/home', Icon: CottageOutlined },
-  { id: 3, name: 'Posts', path: '/creator/posts', Icon: LibraryBooksOutlined },
+  { id: 2, name: 'Posts', path: '/creator/posts', Icon: LibraryBooksOutlined },
+  { id: 3, name: 'Drafts', path: '/creator/drafts', Icon: Inventory2Outlined },
 ];
 
 export default function Creator() {
-  const user = useAppSelector((state) => state.auth.authUser) as User;
-
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -34,14 +32,16 @@ export default function Creator() {
     <Box sx={{ minHeight: '100vh', display: 'flex' }}>
       <Header title="Creator Center" onDrawerToggle={handleDrawerToggle} />
       <Sidebar open={open} onDrawerToggle={handleDrawerToggle}>
-        <Stack spacing={2} alignItems="center" sx={{ my: 2, mx: 4, py: 2, bgcolor: '#e3f2fd', borderRadius: 2 }}>
-          <Avatar alt="User" src={user.avatar} sx={{ width: 56, height: 56, mx: 'auto' }} />
-          <Typography>{user.username}</Typography>
-        </Stack>
-        <Divider />
-        <Box sx={{ px: 2 }}>
-          <NavList menus={menuConfig} />
+        <Box sx={{ mx: 2, my: 3 }}>
+          <Button variant="contained" fullWidth>
+            COMPOSE
+          </Button>
         </Box>
+        <List component="nav" sx={{ px: 2 }}>
+          {menuConfig.map((menu) => (
+            <NavItem key={menu.id} menu={menu} />
+          ))}
+        </List>
       </Sidebar>
       <MainWrapper open={open}>
         <Outlet />

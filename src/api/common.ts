@@ -1,8 +1,11 @@
 import { SvgIconComponent } from '@mui/icons-material';
 
-export interface FetchStatus {
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+export type FetchStatus = 'idle' | 'loading' | 'succeeded' | 'failed';
+
+export interface FetchBase<ParamType> {
+  status: FetchStatus;
   error: string;
+  param: ParamType;
 }
 
 export enum Permission {
@@ -12,14 +15,18 @@ export enum Permission {
   ADMIN = 3,
 }
 
-export interface IMenuConfig {
+export interface IMenuBase {
   id: number;
   name: string;
   path: string;
   Icon: SvgIconComponent;
-  value?: string;
-  rank?: Permission;
-  shown?: boolean;
+}
+
+export interface TableHeadCell<DataItem> {
+  id: keyof DataItem | 'action';
+  label: string;
+  sortable?: boolean;
+  align: 'left' | 'right' | 'center';
 }
 
 // -------------------------------------------------------------------

@@ -19,9 +19,7 @@ import {
   FormControl,
 } from '@mui/material';
 import { EditOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
-import { updateUser, UpdateUserRequest, UserItem, UserRole } from '@/api';
-import { useAlert } from '@/hooks';
-import { useUsersContext } from './usersState';
+import { UpdateUserRequest, UserItem, UserRole } from '@/api';
 
 // -------------------------------------------------------------------
 
@@ -34,30 +32,24 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-// -------------------------------------------------------------------
+const UpdateUserSchema = Yup.object().shape({
+  username: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').nullable(),
+  email: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').email('Must be a valid email').nullable(),
+  password: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').nullable(),
+  role: Yup.mixed().oneOf<UserRole>(['user', 'author', 'admin']).defined(),
+  deleted: Yup.mixed().oneOf<string>(['true', 'false']).defined(),
+});
+
+// ========================// UpdateUser //======================== //
 
 interface IProps {
   user: UserItem;
+  updateUser: (userId: string, req: UpdateUserRequest) => Promise<void>;
 }
 
-export default function UpdateUser({ user }: IProps) {
+export default function UpdateUser({ user, updateUser }: IProps) {
   const [open, setOpen] = useState<boolean>(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const handleShowPassword = () => setShowPassword(!showPassword);
-
-  const { alertMsg } = useAlert();
-  const { dispatch } = useUsersContext();
-
-  const UpdateUserSchema = Yup.object().shape({
-    username: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').nullable(),
-    email: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').email('Must be a valid email').nullable(),
-    password: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').nullable(),
-    role: Yup.mixed().oneOf<UserRole>(['user', 'author', 'admin']).defined(),
-    isDeleted: Yup.mixed().oneOf<string>(['true', 'false']).defined(),
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -65,37 +57,26 @@ export default function UpdateUser({ user }: IProps) {
       email: user.email,
       password: '',
       role: user.role,
-      isDeleted: user.isDeleted ? 'true' : 'false',
+      deleted: user.deleted ? 'true' : 'false',
     },
     validationSchema: UpdateUserSchema,
     onSubmit: async (values) => {
-      try {
-        const req: UpdateUserRequest = { id: user.id };
-        if (values.username && values.username !== user.username) {
-          req.username = values.username;
-        }
-        if (values.email && values.email !== user.email) {
-          req.email = values.email;
-        }
-        if (values.role && values.role !== user.role) {
-          req.role = values.role;
-        }
-        const oldDeleted = user.isDeleted ? 'true' : 'false';
-        if (values.isDeleted && values.isDeleted !== oldDeleted) {
-          req.isDeleted = Boolean(values.isDeleted);
-        }
-        if (Object.keys(req).length === 1) {
-          alertMsg('Nothing seems to change', 'warning');
-          return;
-        }
-
-        await updateUser(req);
-        dispatch({ type: 'reload' });
-        alertMsg('User updated successfully', 'success');
-        setOpen(false);
-      } catch (err) {
-        alertMsg(err as string, 'error');
+      const req: UpdateUserRequest = {};
+      if (values.username && values.username !== user.username) {
+        req.username = values.username;
       }
+      if (values.email && values.email !== user.email) {
+        req.email = values.email;
+      }
+      if (values.role && values.role !== user.role) {
+        req.role = values.role;
+      }
+      const oldDeleted = user.deleted ? 'true' : 'false';
+      if (values.deleted && values.deleted !== oldDeleted) {
+        req.deleted = Boolean(values.deleted);
+      }
+      await updateUser(user.id, req);
+      setOpen(false);
     },
   });
 
@@ -104,11 +85,11 @@ export default function UpdateUser({ user }: IProps) {
   return (
     <>
       <Tooltip title="Modify this user">
-        <IconButton color="secondary" size="small" onClick={handleOpen}>
-          <EditOutlined />
+        <IconButton size="small" onClick={() => setOpen(true)}>
+          <EditOutlined color="info" />
         </IconButton>
       </Tooltip>
-      <StyledDialog open={open} onClose={handleClose}>
+      <StyledDialog open={open} onClose={() => setOpen(false)}>
         <DialogContent>
           <Stack spacing={2} alignItems="center" sx={{ my: 1 }}>
             <Typography component="h1" variant="h5" color="secondary" sx={{ fontWeight: 500 }}>
@@ -148,7 +129,7 @@ export default function UpdateUser({ user }: IProps) {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton onClick={handleShowPassword} edge="end">
+                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
                           {showPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       </InputAdornment>
@@ -172,7 +153,7 @@ export default function UpdateUser({ user }: IProps) {
                       labelId="select-active"
                       id="simple-select-active"
                       label="Deleted"
-                      {...getFieldProps('isDeleted')}
+                      {...getFieldProps('deleted')}
                     >
                       <MenuItem value="true">false</MenuItem>
                       <MenuItem value="false">true</MenuItem>

@@ -1,10 +1,7 @@
 import { alpha, styled } from '@mui/material/styles';
 import { Toolbar, Tooltip, IconButton, Typography } from '@mui/material';
 import { DeleteOutlined } from '@mui/icons-material';
-
-import { deleteSessions, DeleteSessionsRequest } from '@/api';
-import { useAlert, useConfirm } from '@/hooks';
-import { useSessionsContext } from './sessionsState';
+import { SessionState } from '@/hooks';
 
 // -------------------------------------------------------------------
 
@@ -15,30 +12,16 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: theme.spacing(0, 1, 0, 3),
 }));
 
-// -------------------------------------------------------------------
+// ========================// TableToolbar //======================== //
 
-export default function SessionsTableToolbar() {
-  const { state, dispatch } = useSessionsContext();
+interface IProps {
+  state: SessionState;
+  deleteSessions: () => Promise<void>;
+}
+
+export default function TableToolbar({ state, deleteSessions }: IProps) {
   const { selected } = state;
   const numSelected = selected.length;
-
-  const { confirm } = useConfirm();
-  const { alertMsg } = useAlert();
-
-  const handleDeleteSelected = async () => {
-    const isConfirm = await confirm('Are you sure to delete these sessions?');
-    if (!isConfirm) return;
-
-    try {
-      const req: DeleteSessionsRequest = {
-        sessionIds: selected,
-      };
-      await deleteSessions(req);
-      dispatch({ type: 'reload', numDeleted: req.sessionIds.length });
-    } catch (err) {
-      alertMsg(err as string, 'error');
-    }
-  };
 
   return (
     <StyledToolbar
@@ -55,14 +38,14 @@ export default function SessionsTableToolbar() {
             {numSelected} selected
           </Typography>
           <Tooltip title="Delete all selected sessions">
-            <IconButton color="error" onClick={handleDeleteSelected}>
+            <IconButton color="error" onClick={deleteSessions}>
               <DeleteOutlined />
             </IconButton>
           </Tooltip>
         </>
       ) : (
         <Typography component="div" variant="h6">
-          Login history
+          Sessions
         </Typography>
       )}
     </StyledToolbar>

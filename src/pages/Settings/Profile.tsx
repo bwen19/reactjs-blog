@@ -1,27 +1,28 @@
+import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Avatar, Box, Button, IconButton, Paper, Stack, TextField, Typography } from '@mui/material';
-
+import { Avatar, Box, Button, Divider, IconButton, Stack, TextField, Tooltip, Typography } from '@mui/material';
+import { SwitchAccountOutlined } from '@mui/icons-material';
 import { User, changeProfile, ChangeProfileRequest, uploadAvatar } from '@/api';
 import { useAlert, useAppDispatch, useAppSelector } from '@/hooks';
 import { setUser } from '@/redux/authSlice';
 
 // -------------------------------------------------------------------
+const ProfileSchema = Yup.object().shape({
+  username: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!'),
+  email: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').email('Email is not valid'),
+  intro: Yup.string().max(150, 'Too Long!'),
+  file: Yup.mixed(),
+});
 
 const IMG_TYPE = ['image/png', 'image/jpeg'];
 
-export default function Profile() {
-  const { alertMsg } = useAlert();
+// ========================// Profile //======================== //
 
+export default function Profile() {
   const user = useAppSelector((state) => state.auth.authUser) as User;
   const dispatch = useAppDispatch();
-
-  const ProfileSchema = Yup.object().shape({
-    username: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!'),
-    email: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').email('Email is not valid'),
-    intro: Yup.string().max(150, 'Too Long!'),
-    file: Yup.mixed(),
-  });
+  const { alertMsg } = useAlert();
 
   const formik = useFormik({
     initialValues: {
@@ -42,7 +43,7 @@ export default function Profile() {
       if (values.intro && values.intro !== user.intro) {
         req.intro = values.intro;
       }
-      if (Object.keys(req).length === 1) {
+      if (Object.keys(req).length === 0) {
         alertMsg('Nothing seems to change', 'warning');
         return;
       }
@@ -78,24 +79,32 @@ export default function Profile() {
   };
 
   return (
-    <Paper elevation={0} sx={{ py: 3, display: 'flex', width: '100%' }}>
+    <>
+      <Box sx={{ mb: 2, px: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Typography variant="h6">General settings</Typography>
+        <Tooltip title="Go to your profile page">
+          <IconButton component={Link} to={`/user/${user.id}`}>
+            <SwitchAccountOutlined color="primary" />
+          </IconButton>
+        </Tooltip>
+      </Box>
+      <Divider />
       <Box
-        sx={{ mx: 'auto', minWidth: 240, maxWidth: 380 }}
+        sx={{ maxWidth: 360, mx: 'auto', my: 2, px: 2 }}
         component="form"
         autoComplete="off"
         noValidate
         onSubmit={handleSubmit}
       >
-        <Stack alignItems="center" sx={{ mb: 5 }}>
+        <Stack spacing={4} alignItems="center">
           <label htmlFor="upload-file">
             <input style={{ display: 'none' }} id="upload-file" name="file" type="file" onChange={changeAvatar} />
-            <IconButton component="span">
-              <Avatar src={user.avatar} sx={{ width: 80, height: 80 }} />
-            </IconButton>
+            <Tooltip title="Change your avatar" arrow>
+              <IconButton color="secondary" component="span">
+                <Avatar src={user.avatar} sx={{ width: 96, height: 96 }} />
+              </IconButton>
+            </Tooltip>
           </label>
-          <Typography variant="h6" sx={{ mb: 3 }}>
-            My avatar
-          </Typography>
           <TextField
             fullWidth
             autoComplete="username"
@@ -103,7 +112,6 @@ export default function Profile() {
             {...getFieldProps('username')}
             error={Boolean(touched.username && errors.username)}
             helperText={touched.username && errors.username}
-            sx={{ mb: 3 }}
           />
           <TextField
             fullWidth
@@ -113,23 +121,21 @@ export default function Profile() {
             {...getFieldProps('email')}
             error={Boolean(touched.email && errors.email)}
             helperText={touched.email && errors.email}
-            sx={{ mb: 4 }}
           />
           <TextField
             fullWidth
             autoComplete="intro"
             type="intro"
-            label="Personal Intro"
+            label="Personal Introduction"
             {...getFieldProps('intro')}
             error={Boolean(touched.intro && errors.intro)}
             helperText={touched.intro && errors.intro}
-            sx={{ mb: 4 }}
           />
           <Button size="large" type="submit" variant="contained" disabled={isSubmitting}>
-            Save Profile
+            Save Changes
           </Button>
         </Stack>
       </Box>
-    </Paper>
+    </>
   );
 }

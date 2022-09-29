@@ -1,10 +1,10 @@
 import { Link, Outlet } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
-import { AppBar, Box, Container, Paper, Tab, useMediaQuery } from '@mui/material';
-import { LockOutlined, ManageAccountsOutlined, NotificationsOutlined } from '@mui/icons-material';
-import { AccountSection, AppToolbar, CustomTabs, NavList } from '@/components';
+import { AppBar, Box, Container, List, Paper, Tab, useMediaQuery } from '@mui/material';
+import { LockOutlined, ManageAccountsOutlined, EditNotificationsOutlined } from '@mui/icons-material';
 import { useRouteMatch } from '@/hooks';
-import { IMenuConfig } from '@/api';
+import { IMenuBase } from '@/api';
+import { AccountSection, AppToolbar, CustomTabs, NavItem } from '@/components';
 
 // -------------------------------------------------------------------
 
@@ -15,13 +15,32 @@ const Wrapper = styled('div')({
 });
 
 const MainContainer = styled(Container)(({ theme }) => ({
+  flexGrow: 1,
+  display: 'flex',
+  flexDirection: 'column',
   paddingTop: 80,
+  paddingBottom: 32,
   [theme.breakpoints.up('sm')]: {
     paddingTop: 96,
   },
 }));
 
-// -------------------------------------------------------------------
+const Sidebar = styled('div')(({ theme }) => ({
+  flexShrink: 0,
+  width: 200,
+  padding: 16,
+  marginRight: 16,
+  display: 'block',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.background.paper,
+  [theme.breakpoints.down('md')]: {
+    display: 'none',
+  },
+}));
+
+interface IMenuConfig extends IMenuBase {
+  value: string;
+}
 
 const menuConfig: IMenuConfig[] = [
   {
@@ -40,17 +59,17 @@ const menuConfig: IMenuConfig[] = [
   },
   {
     id: 3,
-    name: 'Notifications',
-    value: '/settings/notifications',
-    path: '/settings/notifications',
-    Icon: NotificationsOutlined,
+    name: 'Notification',
+    value: '/settings/notification',
+    path: '/settings/notification',
+    Icon: EditNotificationsOutlined,
   },
 ];
 
 // ========================// Settings //======================== //
 
 export default function Settings() {
-  const routeMatch = useRouteMatch(['/settings/profile', '/settings/password', '/settings/notifications']);
+  const routeMatch = useRouteMatch(['/settings/profile', '/settings/password', '/settings/notification']);
   const currentTab = routeMatch?.pattern?.path;
 
   const theme = useTheme();
@@ -72,13 +91,17 @@ export default function Settings() {
               ))}
           </CustomTabs>
         </Paper>
-        <Box sx={{ height: '100%', display: { xs: 'block', md: 'flex' } }}>
-          <Paper elevation={0} sx={{ width: 200, px: 2, flexShrink: 0, mr: 2, display: { xs: 'none', md: 'block' } }}>
-            <NavList menus={menuConfig} />
-          </Paper>
-          <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ display: 'flex', flexGrow: 1 }}>
+          <Sidebar>
+            <List>
+              {menuConfig.map((menu) => (
+                <NavItem key={menu.id} menu={menu} />
+              ))}
+            </List>
+          </Sidebar>
+          <Paper elevation={0} sx={{ flexGrow: 1, p: 2 }}>
             <Outlet />
-          </Box>
+          </Paper>
         </Box>
       </MainContainer>
     </Wrapper>

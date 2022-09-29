@@ -16,7 +16,7 @@ export const createUser = (req: CreateUserRequest) => axiosPrivate.post<EmptyRes
 // ========================// DeleteUsers //======================== //
 
 export interface DeleteUsersRequest {
-  userIds: string[];
+  userIds: readonly string[];
 }
 
 export const deleteUsers = (req: DeleteUsersRequest) => axiosPrivate.delete<EmptyResponse>('/user', { data: req });

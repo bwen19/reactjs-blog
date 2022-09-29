@@ -1,8 +1,7 @@
 import React from 'react';
 import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
-
-import { UserItem, UserOrderBy } from '@/api';
-import { useUsersContext } from './usersState';
+import { TableHeadCell, UserItem, UserOrderBy } from '@/api';
+import { UserAction, UserState } from '@/hooks';
 
 // -------------------------------------------------------------------
 
@@ -18,55 +17,56 @@ const visuallyHidden = {
   clip: 'rect(0 0 0 0)',
 };
 
-interface HeadCell {
-  id: keyof UserItem | 'action';
-  label: string;
-  sortable?: boolean;
-  align: 'left' | 'right' | 'center';
-}
-
-const headCells: readonly HeadCell[] = [
+const headCells: readonly TableHeadCell<UserItem>[] = [
   {
     id: 'username',
-    label: 'User Profile',
+    label: 'USER PROFILE',
     sortable: true,
     align: 'left',
   },
   {
     id: 'role',
-    label: 'Role',
+    label: 'ROLE',
+    sortable: true,
+    align: 'left',
+  },
+  {
+    id: 'postCount',
+    label: 'POSTS',
+    align: 'center',
+  },
+  {
+    id: 'deleted',
+    label: 'STATUS',
     sortable: true,
     align: 'center',
   },
   {
-    id: 'postCount',
-    label: 'Posts',
-    align: 'right',
-  },
-  {
-    id: 'isDeleted',
-    label: 'Active',
-    sortable: true,
-    align: 'right',
-  },
-  {
     id: 'createAt',
-    label: 'Creat Time',
+    label: 'CREATE TIME',
     sortable: true,
-    align: 'right',
+    align: 'left',
   },
   {
     id: 'action',
-    label: 'Actions',
+    label: 'ACTIONS',
     align: 'center',
   },
 ];
 
-// -------------------------------------------------------------------
+// ========================// TableHeader //======================== //
 
-export default function UsersTableHead() {
-  const { state, dispatch } = useUsersContext();
-  const { users, selected, order, orderBy } = state;
+interface IProps {
+  state: UserState;
+  dispatch: React.Dispatch<UserAction>;
+}
+
+export default function TableHeader({ state, dispatch }: IProps) {
+  const {
+    param: { order, orderBy },
+    users,
+    selected,
+  } = state;
   const rowCount = users.length;
   const numSelected = selected.length;
 
@@ -81,7 +81,7 @@ export default function UsersTableHead() {
 
   const createSortHandler = (property: UserOrderBy) => {
     const isAsc = orderBy === property && order === 'asc';
-    dispatch({ type: 'setSort', order: isAsc ? 'desc' : 'asc', orderBy: property });
+    dispatch({ type: 'setParam', param: { order: isAsc ? 'desc' : 'asc', orderBy: property } });
   };
 
   return (

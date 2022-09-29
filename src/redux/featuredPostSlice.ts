@@ -1,23 +1,22 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FetchStatus, FPostItem, getFeaturedPosts } from '@/api';
+import { FetchBase, FPostItem, getFeaturedPosts } from '@/api';
 
 // ========================// FeaturedPostSlice //======================== //
 
-interface FeaturedPostState extends FetchStatus {
-  num: number;
+interface FeaturedPostState extends FetchBase<number> {
   posts: FPostItem[];
 }
 
 const initialState: FeaturedPostState = {
   status: 'succeeded',
   error: '',
-  num: 1,
+  param: 1,
   posts: [],
 };
 
 export const fetchFeaturedPosts = createAsyncThunk('featuredPost/fetchFeaturedPosts', async (arg, { getState }) => {
   const { featuredPost } = getState() as { featuredPost: FeaturedPostState };
-  const { data } = await getFeaturedPosts({ num: featuredPost.num });
+  const { data } = await getFeaturedPosts({ num: featuredPost.param });
   return data;
 });
 
@@ -26,7 +25,7 @@ export const featuredPostSlice = createSlice({
   initialState,
   reducers: {
     setNum: (state, action: PayloadAction<number>) => {
-      state.num = action.payload;
+      state.param = action.payload;
       state.status = 'idle';
     },
   },

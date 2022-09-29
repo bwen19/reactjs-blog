@@ -1,18 +1,17 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FetchStatus, getPosts, GetPostsRequest, GPostItem } from '@/api';
+import { FetchBase, getPosts, GetPostsRequest, GPostItem } from '@/api';
 
 // ========================// PostSlice //======================== //
 
-interface PostState extends FetchStatus {
+interface PostState extends FetchBase<GetPostsRequest> {
   total: number;
-  params: GetPostsRequest;
   posts: GPostItem[];
 }
 
 const initialState: PostState = {
   status: 'idle',
   error: '',
-  params: {
+  param: {
     pageId: 1,
     pageSize: 15,
     order: 'desc',
@@ -24,7 +23,7 @@ const initialState: PostState = {
 
 export const fetchPosts = createAsyncThunk('post/fetchPosts', async (arg, { getState }) => {
   const { post } = getState() as { post: PostState };
-  const { data } = await getPosts(post.params);
+  const { data } = await getPosts(post.param);
   return data;
 });
 
@@ -32,12 +31,12 @@ export const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
-    setParams: (state, action: PayloadAction<Partial<GetPostsRequest>>) => {
-      state.params = { ...state.params, ...action.payload };
+    setParam: (state, action: PayloadAction<Partial<GetPostsRequest>>) => {
+      state.param = { ...state.param, ...action.payload };
       state.status = 'idle';
     },
-    resetParams: (state) => {
-      state.params = initialState.params;
+    resetParam: (state) => {
+      state.param = initialState.param;
       state.status = 'idle';
     },
   },
@@ -58,5 +57,5 @@ export const postSlice = createSlice({
   },
 });
 
-export const { setParams, resetParams } = postSlice.actions;
+export const { setParam, resetParam } = postSlice.actions;
 export default postSlice.reducer;

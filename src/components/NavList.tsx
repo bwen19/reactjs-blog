@@ -1,30 +1,18 @@
-import { useNavigate } from 'react-router-dom';
-import { List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { IMenuConfig, Permission } from '@/api';
+import { Divider, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { IMenuBase } from '@/api';
 import { NavLinkMui } from '@/components';
-import { useAppSelector } from '@/hooks';
 
-// -------------------------------------------------------------------
-// NavItem
+// ========================// NavItem //======================== //
 
 interface NavItemProps {
-  menu: IMenuConfig;
-  permission: Permission;
+  menu: IMenuBase;
 }
 
-function NavItem({ menu, permission }: NavItemProps) {
-  const { name, path, Icon, rank } = menu;
-
-  if (rank && permission < rank) {
-    return null;
-  }
+export function NavItem({ menu }: NavItemProps) {
+  const { name, path, Icon } = menu;
 
   return (
-    <ListItemButton
-      component={NavLinkMui}
-      to={path}
-      sx={{ borderRadius: 2, alignItems: 'center', mb: 0.5, py: 1, pl: 2, fontSize: '14px' }}
-    >
+    <ListItemButton component={NavLinkMui} to={path} sx={{ mb: 0.5 }}>
       <ListItemIcon>
         <Icon fontSize="small" />
       </ListItemIcon>
@@ -33,57 +21,28 @@ function NavItem({ menu, permission }: NavItemProps) {
   );
 }
 
-// -------------------------------------------------------------------
-// PopperNavItem
+// ========================// PopperNavItem //======================== //
 
 interface PopperNavItemProps {
-  menu: IMenuConfig;
-  permission: Permission;
-  onClose: (event: Event | React.SyntheticEvent) => void;
+  menu: IMenuBase;
+  onClick: (event: Event | React.SyntheticEvent) => void;
+  divider?: boolean;
+  fullWidth?: boolean;
 }
 
-function PopperNavItem({ menu, permission, onClose }: PopperNavItemProps) {
-  const navigate = useNavigate();
-
-  const { name, path, Icon, rank } = menu;
-
-  if (rank && permission < rank) {
-    return null;
-  }
-
-  const handleNavigate = (event: Event | React.SyntheticEvent) => {
-    navigate(path);
-    onClose(event);
-  };
+export function PopperNavItem(props: PopperNavItemProps) {
+  const { menu, onClick, divider, fullWidth } = props;
+  const { name, Icon } = menu;
 
   return (
-    <ListItemButton
-      onClick={handleNavigate}
-      sx={{ borderRadius: 2, alignItems: 'center', mb: 0.5, py: 1, pl: 2, fontSize: '14px' }}
-    >
-      <ListItemIcon>
-        <Icon fontSize="small" />
-      </ListItemIcon>
-      <ListItemText disableTypography primary={name} />
-    </ListItemButton>
-  );
-}
-
-// ========================// NavList //======================== //
-
-interface NavListProps {
-  menus: IMenuConfig[];
-  onClose?: (event: Event | React.SyntheticEvent) => void;
-}
-
-export default function NavList({ menus, onClose }: NavListProps) {
-  const { permission } = useAppSelector((state) => state.auth);
-
-  return (
-    <List component="nav">
-      {onClose
-        ? menus.map((menu) => <PopperNavItem key={menu.id} menu={menu} permission={permission} onClose={onClose} />)
-        : menus.map((menu) => <NavItem key={menu.id} menu={menu} permission={permission} />)}
-    </List>
+    <>
+      {divider && <Divider sx={{ my: 1 }} />}
+      <ListItemButton onClick={onClick} sx={{ ...(fullWidth && { borderRadius: 0 }) }}>
+        <ListItemIcon>
+          <Icon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText disableTypography primary={name} />
+      </ListItemButton>
+    </>
   );
 }

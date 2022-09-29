@@ -5,7 +5,7 @@ import { AuthGuard, LazyLoad } from '@/components';
 const Settings = LazyLoad(() => import('.'));
 const Profile = LazyLoad(() => import('./Profile'));
 const Password = LazyLoad(() => import('./Password'));
-const Notifications = LazyLoad(() => import('./Notifications'));
+const Notification = LazyLoad(() => import('./Notification'));
 
 // ========================// Settings Routing //======================== //
 
@@ -16,7 +16,7 @@ const SettingsRoutes: RouteObject = {
     { path: '', element: <Navigate to="/account/profile" /> },
     { path: 'profile', element: <Profile /> },
     { path: 'password', element: <Password /> },
-    { path: 'notifications', element: <Notifications /> },
+    { path: 'notification', element: <Notification /> },
   ],
 };
 

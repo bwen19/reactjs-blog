@@ -1,19 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
-import {
-  Avatar,
-  Badge,
-  Box,
-  Divider,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Stack,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
+import { Avatar, Badge, Box, Divider, List, Stack, Tooltip, Typography, useMediaQuery } from '@mui/material';
 import {
   AdminPanelSettingsOutlined,
   EmojiObjectsOutlined,
@@ -24,10 +12,16 @@ import {
 } from '@mui/icons-material';
 import { logoutThunk } from '@/redux/authSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks';
-import { IMenuConfig, Permission, User } from '@/api';
+import { IMenuBase, Permission, User } from '@/api';
 import MenuPopper from './MenuPopper';
 import CustomIconButton from './CustomIconButton';
-import NavList from './NavList';
+import { PopperNavItem } from './NavList';
+
+interface IMenuConfig extends IMenuBase {
+  rank: Permission;
+  shown?: boolean;
+  divider?: boolean;
+}
 
 // ========================// ToolbarIcons //======================== //
 
@@ -75,6 +69,7 @@ interface AccountPopperProps {
 }
 
 function AccountPopper({ user, menus }: AccountPopperProps) {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [open, setOpen] = useState<boolean>(false);
@@ -100,9 +95,17 @@ function AccountPopper({ user, menus }: AccountPopperProps) {
     prevOpen.current = open;
   }, [open]);
 
-  const handleLogout = async (event: Event | React.SyntheticEvent) => {
-    dispatch(logoutThunk());
-    handleClose(event);
+  const handleClick = (menu: IMenuConfig) => {
+    if (menu.name === 'Logout') {
+      return async (event: Event | React.SyntheticEvent) => {
+        dispatch(logoutThunk());
+        handleClose(event);
+      };
+    }
+    return (event: Event | React.SyntheticEvent) => {
+      navigate(menu.path);
+      handleClose(event);
+    };
   };
 
   return (
@@ -111,7 +114,7 @@ function AccountPopper({ user, menus }: AccountPopperProps) {
         <Avatar alt="User" src={user.avatar} sx={{ width: 30, height: 30 }} />
       </CustomIconButton>
       <MenuPopper anchorEl={anchorRef.current} open={open} placement="bottom-end" onClose={handleClose}>
-        <Box sx={{ minWidth: 210 }}>
+        <Box sx={{ minWidth: 240 }}>
           <UsernameWrapper>
             <Typography variant="body2" color="text.disabled">
               Signed in as&ensp;
@@ -121,16 +124,11 @@ function AccountPopper({ user, menus }: AccountPopperProps) {
             </Typography>
           </UsernameWrapper>
           <Divider />
-          <Box sx={{ px: 1.5, pb: 1 }}>
-            <NavList menus={menus} onClose={handleClose} />
-            <Divider />
-            <ListItemButton onClick={handleLogout} sx={{ my: 1, py: 1, borderRadius: '8px', fontSize: '14px' }}>
-              <ListItemIcon>
-                <LogoutOutlined fontSize="small" />
-              </ListItemIcon>
-              <ListItemText disableTypography primary="Logout" />
-            </ListItemButton>
-          </Box>
+          <List component="nav" sx={{ px: 1.5 }}>
+            {menus.map((menu) => (
+              <PopperNavItem key={menu.id} menu={menu} onClick={handleClick(menu)} divider={menu.divider} />
+            ))}
+          </List>
         </Box>
       </MenuPopper>
     </>
@@ -183,6 +181,14 @@ export default function AccountSection() {
       Icon: AdminPanelSettingsOutlined,
       rank: Permission.ADMIN,
       shown: true,
+    },
+    {
+      id: 6,
+      name: 'Logout',
+      path: '',
+      Icon: LogoutOutlined,
+      rank: Permission.USER,
+      divider: true,
     },
   ];
 

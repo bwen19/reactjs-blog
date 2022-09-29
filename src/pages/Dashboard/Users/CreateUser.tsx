@@ -19,9 +19,7 @@ import {
   FormControl,
 } from '@mui/material';
 import { PersonAddOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
-import { createUser, CreateUserRequest, UserRole } from '@/api';
-import { useAlert } from '@/hooks';
-import { useUsersContext } from './usersState';
+import { CreateUserRequest, UserRole } from '@/api';
 
 // -------------------------------------------------------------------
 
@@ -34,29 +32,30 @@ const StyledDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-// -------------------------------------------------------------------
+const CreateUserSchema = Yup.object().shape({
+  username: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Username is required'),
+  email: Yup.string()
+    .min(3, 'Too Short!')
+    .max(50, 'Too Long!')
+    .email('Must be a valid email')
+    .required('Email is required'),
+  password: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Password is required'),
+  role: Yup.mixed().oneOf<UserRole>(['user', 'author', 'admin']).defined(),
+});
 
-export default function CreateUser() {
+// ========================// CreateUser //======================== //
+
+interface IProps {
+  createUser: (req: CreateUserRequest) => Promise<void>;
+}
+
+export default function CreateUser({ createUser }: IProps) {
   const [open, setOpen] = useState<boolean>(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleShowPassword = () => setShowPassword(!showPassword);
-
-  const { alertMsg } = useAlert();
-  const { dispatch } = useUsersContext();
-
-  const CreateUserSchema = Yup.object().shape({
-    username: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!').required('Username is required'),
-    email: Yup.string()
-      .min(3, 'Too Short!')
-      .max(50, 'Too Long!')
-      .email('Must be a valid email')
-      .required('Email is required'),
-    password: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Password is required'),
-    role: Yup.mixed().oneOf<UserRole>(['user', 'author', 'admin']).defined(),
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -67,20 +66,14 @@ export default function CreateUser() {
     },
     validationSchema: CreateUserSchema,
     onSubmit: async (values) => {
-      try {
-        const req: CreateUserRequest = {
-          username: values.username,
-          email: values.email,
-          password: values.password,
-          role: values.role as UserRole,
-        };
-        await createUser(req);
-        setOpen(false);
-        dispatch({ type: 'reload' });
-        alertMsg('User created successfully', 'success');
-      } catch (err) {
-        alertMsg(err as string, 'error');
-      }
+      const req: CreateUserRequest = {
+        username: values.username,
+        email: values.email,
+        password: values.password,
+        role: values.role as UserRole,
+      };
+      await createUser(req);
+      setOpen(false);
     },
   });
 
@@ -89,8 +82,8 @@ export default function CreateUser() {
   return (
     <>
       <Tooltip title="Add new user">
-        <IconButton color="primary" onClick={handleOpen}>
-          <PersonAddOutlined />
+        <IconButton onClick={handleOpen}>
+          <PersonAddOutlined color="info" />
         </IconButton>
       </Tooltip>
       <StyledDialog open={open} onClose={handleClose}>

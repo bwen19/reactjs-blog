@@ -1,24 +1,23 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { FetchStatus, getUserProfile, UserProfile } from '@/api';
+import { FetchBase, getUserProfile, UserProfile } from '@/api';
 import { AuthState } from './authSlice';
 
 // ========================// UserProfileSlice //======================== //
 
-interface UserProfileState extends FetchStatus {
-  userId: string;
+interface UserProfileState extends FetchBase<string> {
   user: UserProfile | null;
 }
 
 const initialState: UserProfileState = {
   status: 'succeeded',
   error: '',
-  userId: '',
+  param: '',
   user: null,
 };
 
 export const fetchProfile = createAsyncThunk('userProfile/fetchProfile', async (arg, { getState }) => {
   const { userProfile, auth } = getState() as { userProfile: UserProfileState; auth: AuthState };
-  const { data } = await getUserProfile(userProfile.userId, auth.isLoggedIn);
+  const { data } = await getUserProfile(userProfile.param, auth.isLoggedIn);
   return data;
 });
 
@@ -27,7 +26,7 @@ export const userProfileSlice = createSlice({
   initialState,
   reducers: {
     setUserId: (state, action: PayloadAction<string>) => {
-      state.userId = action.payload;
+      state.param = action.payload;
       state.status = 'idle';
     },
   },

@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { alpha, styled } from '@mui/material/styles';
 import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment, Box } from '@mui/material';
-import { DeleteOutlined, SearchOutlined } from '@mui/icons-material';
-
-import { deleteUsers, DeleteUsersRequest } from '@/api';
-import { useAlert, useConfirm } from '@/hooks';
+import { DeleteForeverOutlined, SearchOutlined } from '@mui/icons-material';
+import { UserAction, UserState } from '@/hooks';
+import { CreateUserRequest } from '@/api';
 import CreateUser from './CreateUser';
-import { useUsersContext } from './usersState';
 
 // -------------------------------------------------------------------
 
@@ -17,36 +15,26 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: theme.spacing(0, 1, 0, 3),
 }));
 
-// -------------------------------------------------------------------
+// ========================// TableToolbar //======================== //
 
-export default function UsersTableToolbar() {
-  const { state, dispatch } = useUsersContext();
+interface IProps {
+  state: UserState;
+  dispatch: React.Dispatch<UserAction>;
+  createUser: (req: CreateUserRequest) => Promise<void>;
+  deleteUsers: () => Promise<void>;
+}
+
+export default function TableToolbar(props: IProps) {
+  const { state, dispatch, createUser, deleteUsers } = props;
+
   const { selected } = state;
   const numSelected = selected.length;
-
-  const { confirm } = useConfirm();
-  const { alertMsg } = useAlert();
-
-  const handleDeleteSelected = async () => {
-    const isConfirm = await confirm('Are you sure to delete these users?');
-    if (!isConfirm) return;
-
-    try {
-      const req: DeleteUsersRequest = {
-        userIds: selected,
-      };
-      await deleteUsers(req);
-      dispatch({ type: 'reload' });
-    } catch (err) {
-      alertMsg(err as string, 'error');
-    }
-  };
 
   const [filterName, setFilterName] = useState<string>('');
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setFilterName(event.target.value);
   const handleKeyPress = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      dispatch({ type: 'setKeyword', keyword: filterName });
+      dispatch({ type: 'setParam', param: { keyword: filterName } });
     }
   };
 
@@ -65,8 +53,8 @@ export default function UsersTableToolbar() {
             {numSelected} selected
           </Typography>
           <Tooltip title="Delete all selected users">
-            <IconButton color="error" onClick={handleDeleteSelected}>
-              <DeleteOutlined />
+            <IconButton onClick={deleteUsers}>
+              <DeleteForeverOutlined color="warning" />
             </IconButton>
           </Tooltip>
         </>
@@ -88,7 +76,7 @@ export default function UsersTableToolbar() {
               }
             />
           </Box>
-          <CreateUser />
+          <CreateUser createUser={createUser} />
         </>
       )}
     </StyledToolbar>

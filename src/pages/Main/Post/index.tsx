@@ -3,12 +3,9 @@ import { useParams } from 'react-router-dom';
 import { Box, Paper, Fab } from '@mui/material';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 
-import Markdown from '@/components/Markdown';
-import ScrollTop from '@/components/ScrollTop';
-import ScrollTopOnMount from '@/components/ScrollTopOnMount';
+import { ImageBackDrop, Markdown, ScrollTop, ScrollTopOnMount } from '@/components';
 import SideBar from './SideBar';
 import Comments from './Comments';
-import { ImageBackDrop } from '@/components';
 import Image from '@/assets/images/post.png';
 
 // ---------------------------------------------------------------------------

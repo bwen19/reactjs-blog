@@ -29,10 +29,14 @@ import {
 import Image from '@/assets/images/user.png';
 
 import { useAppDispatch, useAppSelector, useRouteMatch } from '@/hooks';
-import { setParams } from '@/redux/userPostSlice';
+import { setParam } from '@/redux/userPostSlice';
 import { setUserId } from '@/redux/userProfileSlice';
 import { CustomTabs, ImageBackDrop } from '@/components';
-import { IMenuConfig } from '@/api';
+import { IMenuBase } from '@/api';
+
+interface IMenuConfig extends IMenuBase {
+  value: string;
+}
 
 // ---------------------------------------------------------------------------
 
@@ -43,7 +47,7 @@ export default function UserProfile() {
   useEffect(() => {
     if (userId) {
       dispatch(setUserId(userId));
-      dispatch(setParams({ authorId: userId }));
+      dispatch(setParam({ authorId: userId }));
     }
   }, [dispatch, userId]);
 
@@ -101,7 +105,7 @@ export default function UserProfile() {
         </Typography>
         <Box sx={{ mt: 2 }}>
           {authUser?.id === user?.id ? (
-            <Button variant="contained" color="primary" onClick={editProfile}>
+            <Button component={Link} to="/settings/profile" variant="contained" color="primary">
               Edit
             </Button>
           ) : user?.followed ? (
