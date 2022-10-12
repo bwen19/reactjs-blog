@@ -57,6 +57,12 @@ export interface User {
   role: UserRole;
 }
 
+export interface UserItem {
+  id: string;
+  username: string;
+  avatar: string;
+}
+
 export interface UserInfo {
   id: string;
   username: string;

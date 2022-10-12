@@ -43,7 +43,7 @@ export interface ListUsersRequest extends PageOrderOption {
   keyword?: string;
 }
 
-export interface UserItem {
+export interface ListUserItem {
   id: string;
   username: string;
   email: string;
@@ -56,7 +56,7 @@ export interface UserItem {
 
 export interface ListUsersResponse {
   total: string;
-  users: UserItem[];
+  users: ListUserItem[];
 }
 
 export const listUsers = (req: ListUsersRequest) => axiosPrivate.get<ListUsersResponse>('/user', { params: req });

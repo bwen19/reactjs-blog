@@ -1,10 +1,11 @@
 import axiosPrivate from './axiosPrivate';
-import { EmptyResponse, PageOrderOption } from './common';
+import { EmptyResponse, PageOrderOption, UserItem } from './common';
 
 // -------------------------------------------------------------------
 
 export interface Session {
   id: string;
+  user: UserItem;
   userAgent: string;
   clientIp: string;
   createAt: Date;

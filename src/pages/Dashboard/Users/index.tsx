@@ -81,7 +81,7 @@ export default function Users() {
                     <Checkbox checked={isItemSelected} onChange={(event) => handleSelect(event, id)} />
                   </TableCell>
                   <TableCell>
-                    <Stack spacing={2} direction="row" alignItems="center">
+                    <Stack spacing={1} direction="row" alignItems="center">
                       <Avatar alt="User" src={avatar} sx={{ width: 40, height: 40 }} />
                       <Box>
                         <Typography variant="subtitle2">{username}</Typography>
