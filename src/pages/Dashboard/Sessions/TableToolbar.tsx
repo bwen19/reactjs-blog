@@ -1,6 +1,6 @@
 import { alpha, styled } from '@mui/material/styles';
 import { Toolbar, Tooltip, IconButton, Typography } from '@mui/material';
-import { DeleteOutlined } from '@mui/icons-material';
+import { DeleteForeverOutlined } from '@mui/icons-material';
 import { SessionState } from '@/hooks';
 
 // -------------------------------------------------------------------
@@ -39,7 +39,7 @@ export default function TableToolbar({ state, deleteSessions }: IProps) {
           </Typography>
           <Tooltip title="Delete all selected sessions">
             <IconButton color="error" onClick={deleteSessions}>
-              <DeleteOutlined />
+              <DeleteForeverOutlined color="warning" />
             </IconButton>
           </Tooltip>
         </>

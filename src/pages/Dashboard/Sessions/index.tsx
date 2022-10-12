@@ -1,8 +1,10 @@
 import React from 'react';
 import {
+  Avatar,
   Checkbox,
   IconButton,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -12,7 +14,7 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { HighlightOffOutlined } from '@mui/icons-material';
+import { DeleteOutlined } from '@mui/icons-material';
 import { useSessions } from '@/hooks';
 import { fAgent, fDateSuffix } from '@/utils';
 import TableHeader from './TableHeader';
@@ -75,6 +77,12 @@ export default function Sessions() {
                   <TableCell padding="checkbox">
                     <Checkbox checked={isItemSelected} onChange={(event) => handleSelect(event, id)} />
                   </TableCell>
+                  <TableCell>
+                    <Stack spacing={2} direction="row" alignItems="center">
+                      <Avatar alt="User" src={session.user.avatar} sx={{ width: 40, height: 40 }} />
+                      <Typography variant="subtitle2">{session.user.username}</Typography>
+                    </Stack>
+                  </TableCell>
                   <TableCell>{fAgent(userAgent)}</TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">{clientIp}</Typography>
@@ -84,7 +92,7 @@ export default function Sessions() {
                   <TableCell align="center">
                     <Tooltip title="Delete this session">
                       <IconButton color="warning" size="small" onClick={() => deleteSessions(id)}>
-                        <HighlightOffOutlined fontSize="small" />
+                        <DeleteOutlined color="info" />
                       </IconButton>
                     </Tooltip>
                   </TableCell>
@@ -98,9 +106,9 @@ export default function Sessions() {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25, 50]}
         component="div"
-        count={Number(total)}
+        count={total}
         rowsPerPage={pageSize}
-        page={pageId}
+        page={pageId - 1}
         onPageChange={handleChangePageId}
         onRowsPerPageChange={handleChangePageSize}
       />

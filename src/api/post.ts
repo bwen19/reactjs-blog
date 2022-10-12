@@ -1,6 +1,6 @@
 import axiosInstance from './axiosInstance';
 import axiosPrivate from './axiosPrivate';
-import { Category, EmptyResponse, PageOrderOption, Tag, UserInfo } from './common';
+import { Category, EmptyResponse, PageOrderOption, Tag, UserInfo, UserItem } from './common';
 
 // -------------------------------------------------------------------
 
@@ -17,16 +17,10 @@ export interface Post {
   status: PostStatus;
 }
 
-export interface AuthorItem {
-  id: string;
-  username: string;
-  avatar: string;
-}
-
 export interface PostItem {
   id: string;
   title: string;
-  author: AuthorItem;
+  author: UserItem;
   categories: Category[];
   tags: Tag[];
   status: PostStatus;
@@ -132,7 +126,7 @@ export interface GetFeaturedPostsRequest {
 export interface FPostItem {
   id: string;
   title: string;
-  author: AuthorItem;
+  author: UserItem;
   coverImage: string;
   viewCount: string;
   starCount: string;
@@ -163,7 +157,7 @@ export interface GetPostsRequest extends PageOrderOption {
 export interface GPostItem {
   id: string;
   title: string;
-  author: AuthorItem;
+  author: UserItem;
   coverImage: string;
   tags: Tag[];
   viewCount: string;
