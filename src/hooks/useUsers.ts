@@ -11,14 +11,14 @@ import {
   ListUsersResponse,
   updateUser as updateUserApi,
   UpdateUserRequest,
-  UserItem,
+  ListUserItem,
 } from '@/api';
 import useConfirm from './useConfirm';
 import useAlert from './useAlert';
 
 export interface UserState extends FetchBase<ListUsersRequest> {
   total: number;
-  users: UserItem[];
+  users: ListUserItem[];
   selected: readonly string[];
 }
 

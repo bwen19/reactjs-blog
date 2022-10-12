@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
-import { TableHeadCell, UserItem, UserOrderBy } from '@/api';
+import { TableHeadCell, ListUserItem, UserOrderBy } from '@/api';
 import { UserAction, UserState } from '@/hooks';
 
 // -------------------------------------------------------------------
@@ -17,7 +17,7 @@ const visuallyHidden = {
   clip: 'rect(0 0 0 0)',
 };
 
-const headCells: readonly TableHeadCell<UserItem>[] = [
+const headCells: readonly TableHeadCell<ListUserItem>[] = [
   {
     id: 'username',
     label: 'USER PROFILE',

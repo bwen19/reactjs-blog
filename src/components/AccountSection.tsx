@@ -16,6 +16,7 @@ import { IMenuBase, Permission, User } from '@/api';
 import MenuPopper from './MenuPopper';
 import CustomIconButton from './CustomIconButton';
 import { PopperNavItem } from './NavList';
+import { role2Permission } from '@/utils';
 
 interface IMenuConfig extends IMenuBase {
   rank: Permission;
@@ -69,9 +70,6 @@ interface AccountPopperProps {
 }
 
 function AccountPopper({ user, menus }: AccountPopperProps) {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-
   const [open, setOpen] = useState<boolean>(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
 
@@ -95,6 +93,9 @@ function AccountPopper({ user, menus }: AccountPopperProps) {
     prevOpen.current = open;
   }, [open]);
 
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const handleClick = (menu: IMenuConfig) => {
     if (menu.name === 'Logout') {
       return async (event: Event | React.SyntheticEvent) => {
@@ -107,6 +108,8 @@ function AccountPopper({ user, menus }: AccountPopperProps) {
       handleClose(event);
     };
   };
+
+  const userRank = role2Permission(user.role);
 
   return (
     <>
@@ -125,7 +128,7 @@ function AccountPopper({ user, menus }: AccountPopperProps) {
           </UsernameWrapper>
           <Divider />
           <List component="nav" sx={{ px: 1.5 }}>
-            {menus.map((menu) => (
+            {menus.map((menu) => userRank >= menu.rank && (
               <PopperNavItem key={menu.id} menu={menu} onClick={handleClick(menu)} divider={menu.divider} />
             ))}
           </List>

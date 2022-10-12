@@ -19,31 +19,36 @@ const visuallyHidden = {
 
 const headCells: readonly TableHeadCell<Session>[] = [
   {
+    id: 'user',
+    label: 'USER',
+    align: 'left',
+  },
+  {
     id: 'userAgent',
-    label: 'Agent',
+    label: 'AGENT',
     align: 'left',
   },
   {
     id: 'clientIp',
-    label: 'IP',
+    label: 'CLIENT IP',
     sortable: true,
     align: 'left',
   },
   {
     id: 'createAt',
-    label: 'CreatTime',
+    label: 'CREATE AT',
     sortable: true,
     align: 'right',
   },
   {
     id: 'expiresAt',
-    label: 'ExpireTime',
+    label: 'EXPIRES AT',
     sortable: true,
     align: 'right',
   },
   {
     id: 'action',
-    label: 'Actions',
+    label: 'ACTION',
     align: 'center',
   },
 ];
